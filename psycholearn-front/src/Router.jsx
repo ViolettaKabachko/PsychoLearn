@@ -6,6 +6,7 @@ const Router = () => {
     <BrowserRouter>
          <Routes>
             <Route exact path='/start' Component={StartPage}/>
+            <Route exact path='/' Component={() => window.location = '/start'}/>
         </Routes>
     </BrowserRouter>
     )

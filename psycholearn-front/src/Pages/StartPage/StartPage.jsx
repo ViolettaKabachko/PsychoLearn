@@ -38,7 +38,7 @@ const StartPage = () => {
 
             <div className={classes.downTitle}>
                 This is psycho-community. <br></br>
-                You can join us freely if you:
+                Join us freely if you:
             </div>
 
             <div className={classes.list}>
