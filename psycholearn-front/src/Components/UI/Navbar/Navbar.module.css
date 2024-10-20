@@ -1,0 +1,62 @@
+.navbar {
+    font-size: 26px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    height: 100%;
+    width: 100%;
+}
+
+.inner_link > a {
+    text-decoration: none;
+    color: black;
+    transition: all ease-in-out 0.3s;
+}
+
+.inner_link > a:hover {
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+
+.logo {
+    width: 5%;
+}
+
+.logo img {
+    transition: all ease-in-out 0.2s;
+}
+
+.logo:hover img {
+    transform: rotate(30deg);
+}
+
+.log_in_logo {
+    width: 10%;
+    height: 85%;
+    background-image: url("C:\Users\miham\Desktop\Prog\Projects\PsychoLearn\psycholearn-front\src\Images\cursivelogo.svg");
+    transition: all ease-in-out 0.2s;
+    background-repeat: no-repeat;
+}
+
+.log_in_logo:hover {
+    background-image: url("C:\Users\miham\Desktop\Prog\Projects\PsychoLearn\psycholearn-front\src\Images\LoginLogo2.svg");
+    cursor: pointer;
+    background-repeat: no-repeat;
+}
+
+
+/* .log_in_logo .color_log_in_logo {
+    display: none;
+    
+}
+
+.log_in_logo:hover .empty_logo {
+    display: none;
+}
+
+.log_in_logo:hover .color_log_in_logo {
+    display: block; 
+    cursor: pointer;
+} */
+

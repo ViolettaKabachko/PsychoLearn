@@ -1,0 +1,17 @@
+.button {
+    --r-color: 0;
+    --g-color: 0;
+    --b-color: 0;
+    background-color: rgb(var(--r-color), var(--g-color), var(--b-color)); 
+    font-size: 26px;
+    border: 0;
+    border-radius: 9px 9px 1px 1px;
+    width: 100%;
+    padding: 10px 5px 10px 5px;
+    transition: all ease-in-out 0.2s;
+}
+
+.button:hover {
+    cursor: pointer;
+    background-color: rgb(calc(var(--r-color) - 23), calc(var(--g-color) - 44), calc(var(--b-color) - 39));
+}

@@ -1,0 +1,145 @@
+body {
+    font-family: 'Istok Web';
+    margin: 0;
+    height: 100vh;
+}
+
+html {
+    height: 100vh;
+    scroll-behavior: smooth;
+}
+
+.startpage {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    height: 100%;
+}
+
+.navbar {
+    grid-column-start: 1;
+    grid-column-end: 6;
+    grid-row: 1 5
+}
+
+.title {
+    display: flex;
+    grid-row-start: 3;
+    grid-column-start: 3;
+    align-items: center;
+    justify-self: center;
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.sign_up_button {
+    grid-column-start: 3;
+    grid-row-start: 4;
+}
+
+.log_in_button {
+    grid-column-start: 3;
+    grid-row-start: 5;
+}
+
+
+.leftPicture {
+    grid-row: 3 / 5;
+    grid-column: 1 / 3;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../Images/red_psycho.png');
+    background-repeat: no-repeat;
+    background-size: 70%;
+    background-position: center;
+}
+
+.rightPicture {
+    grid-row: 4 / 6;
+    grid-column: 4 / 6;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../Images/blue_psycho.png');
+    background-repeat: no-repeat;
+    background-size: 55%;
+    background-position: top;
+}
+
+
+.firstBlock {
+    width: 100%;
+    height: 100%;
+}
+
+.secondBlock {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    height: 100%;
+    background-color: rgb(193, 229, 217);     
+    transition: all ease-in-out 0.2s;
+}
+
+.downPicutre {
+    background-image: url('../../Images/downpagelogo.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    grid-row: 2 / 6;
+    grid-column: 1 / 3;
+    background-size: 100%;
+}
+
+.downTitle {
+    grid-row: 2 / 3;
+    grid-column: 3 / 5;
+    /* display: flex; */
+    align-items: flex-start;
+    justify-content: flex-start;
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.list {
+    grid-row: 3 / 5;
+    grid-column: 3 / 4;
+    font-size: 24px;
+    font-weight: lighter;
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-row:  3 / 6;
+    grid-column: 4 / 6;
+    width: 100%;
+}
+
+.upRise {
+    display: flex;
+    height: 100%;
+    grid-row:  5 / 7;
+    grid-column: 3 / 4;
+    font-weight: bold;
+    font-size: 44px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.psylogo {
+    background-image: url('../../Images/psychological-icon.svg');
+    grid-column: 4 / 6;
+    grid-row: 3 / 6;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50%;
+}
+
+.upRise {
+    transition: all ease-in-out 0.2s;
+}
+
+.upRise:hover {
+    text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
