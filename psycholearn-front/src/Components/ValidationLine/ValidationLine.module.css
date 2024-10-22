@@ -1,0 +1,12 @@
+.validation {
+    font-family: "Istok Web";
+    font-size: 13px;
+}
+
+.validation.success {
+    color: rgb(122, 226, 57)
+}
+
+.validation.failure {
+    color: rgb(226, 57, 57)
+}
