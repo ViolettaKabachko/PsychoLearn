@@ -17,3 +17,9 @@ export const hasDigits = (text) => {
 export const passwordAreTheSame = (password, secondPassword) => {
     return password === secondPassword;
 }
+
+let emailRegex = new RegExp("^[\\w\\d.-_]+@[\\w\\d.-_]+[\\w\\d]$")
+
+export const validateEmail = (email) => {
+    return String(email).match(emailRegex) !== null
+};
