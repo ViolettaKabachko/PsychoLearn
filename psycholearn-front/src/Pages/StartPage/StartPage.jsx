@@ -1,4 +1,5 @@
 import {React, useState} from 'react'
+import { useNavigate } from 'react-router-dom'
 import Navbar from '../../Components/UI/Navbar/Navbar'
 import classes from './StarPage.module.css'
 import Button from '../../Components/Button/Button'
@@ -7,26 +8,28 @@ import Input from '../../Components/Input/Input'
 import ValidationLine from '../../Components/ValidationLine/ValidationLine'
 import { hasCapitalLetters, hasDigits, hasEnoughLength, hasLowerLetter, passwordAreTheSame, validateEmail } from '../../validation'
 import { HttpGet, HttpPost } from '../../requests'
+import bcrypt from 'bcryptjs'
 
 
 const StartPage = () => {
+    const navigate = useNavigate();
     const [active, setActive] = useState(false)
-    const [name, setName] = useState("")                          
+    const [name, setName] = useState("")
     const [surname, setSurname] = useState("")
     const [email, setEmail] = useState("")
+    const [logInEmail, setLogInEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [logInPassword, setLogInPassword] = useState("")
     const [repeatedPassword, setRepeatedPassword] = useState("")
     const [firstPasswordEnter, setFirtsPasswordEnter] = useState(false);
     const [response, setResponse] = useState();
     const [answer, setAnswer] = useState("");
+    const [acitveLogIn, setActiveLogIn] = useState(false)
 
   const clear = () => {
-    setName("")
-    setSurname("")  
-    setEmail("")
-    setPassword("")
-    setRepeatedPassword("")
-    setAnswer("")
+    setLogInPassword("");
+    setLogInEmail("")
+    setResponse("")
   }
 
 
@@ -68,17 +71,24 @@ const StartPage = () => {
             name.length > 1,
             surname.length > 1]
             .reduce((acc, cur) => {return acc + cur}, 0) !== 8} 
+
             onClick={async () => {
+                let salt = await HttpGet("/secure/get_salt")
+                console.log(salt)
                 let res = await HttpPost("/users", {
                 name: name,
                 surname: surname,
                 email: email,
-                password: password
+                password: await bcrypt.hash(password, salt.salt)
               })
               setResponse(Object.hasOwn(await res, "msg"));
               if (Object.hasOwn(await res, "msg")) {
                 setAnswer((await res).msg)
-                clear()
+                setName("")
+                setSurname("")  
+                setEmail("")
+                setPassword("")
+                setRepeatedPassword("")
               }
               else {
                 setAnswer((await res).err);
@@ -88,11 +98,43 @@ const StartPage = () => {
             }}
            color={{'r': 170, 'g': 218, 'b': 209}}>Sign Up
            </Button>
+
           {response !== undefined && <ValidationLine func={() => response}>{answer}</ValidationLine>}
+        </ModalWindow>
+
+        <ModalWindow active={acitveLogIn} setActive={setActiveLogIn}>
+            <div onClick={() => {setActiveLogIn(false); clear()}} className={classes.backCross}>
+            </div>
+
+            <div className={classes.signUpTitle}>
+                Log in
+            </div>
+
+            <Input placeholder="Email" value={logInEmail} onChange={(e) => {setLogInEmail(e.target.value); setResponse("")}}></Input>
+            <Input type="password" placeholder="Password" value={logInPassword} onChange={(e) => {setLogInPassword(e.target.value); setResponse("")}}></Input>
+            <Button
+             disabled={!(validateEmail(logInEmail) && logInPassword.length > 1)} 
+             color={{'r': 149, 'g': 237, 'b': 219}} 
+             onClick={async () => {
+                let res = await HttpPost("/auth/login", {
+                    email: logInEmail,
+                    password: logInPassword
+                })
+                if (Object.hasOwn(res, "err"))
+                    setResponse(res.err)
+                else {
+                    localStorage.setItem("access_token", res.access_token)
+                    localStorage.setItem("id", res.id)
+                    navigate("/users/" + res.id)
+                }
+                console.log(res)
+             }}>Sign Up</Button>
+             
+             {response !== undefined && <ValidationLine func={() => false} >{response}</ValidationLine>}
         </ModalWindow>
         <div className={classes.startpage}>
             <div className={classes.navbar}>
-                <Navbar></Navbar>
+                <Navbar onLogoFunc={() => setActiveLogIn(true)}></Navbar>
             </div>
 
             <div className={classes.title}>
@@ -106,7 +148,7 @@ const StartPage = () => {
             </div>
 
             <div className={classes.log_in_button}>
-              <Button disabled={false} color={{'r': 255, 'g': 193, 'b': 194}} >Log in</Button>
+              <Button disabled={false} onClick={() => setActiveLogIn(true)} color={{'r': 255, 'g': 193, 'b': 194}} >Log in</Button>
             </div>
 
             <div className={classes.leftPicture}>

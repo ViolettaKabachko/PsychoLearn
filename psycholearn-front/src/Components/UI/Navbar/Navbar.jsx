@@ -2,7 +2,7 @@ import React from 'react'
 import classes from './Navbar.module.css'
 import logo from '../../../Images/logo.svg'
 
-const Navbar = () => {
+const Navbar = ({...props}) => {
   return (
     <div className={classes.navbar}>
         <div className={classes.logo}>
@@ -21,7 +21,7 @@ const Navbar = () => {
           <a href='/'>More psycho articles</a>
         </div>
 
-        <div className={classes.log_in_logo}>
+        <div onClick={() => props.onLogoFunc()} className={classes.log_in_logo}>
           <div>
             
           </div>

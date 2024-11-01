@@ -9,7 +9,6 @@ export const HttpPost = async (path, body) => {
         body: JSON.stringify(body),
         credentials: "include"
     }
-    console.log(options.body)
     try {
         const res = await fetch(serverUrl + path, options)
         return await res.json()
@@ -20,11 +19,13 @@ export const HttpPost = async (path, body) => {
     //finally
 }
 
-export const HttpGet = async (path, body) => {
+export const HttpGet = async (path, headers) => {
     const options = {
         method: "GET",
-        credentials: "include"
+        credentials: "include",
+        headers: {...headers}
     }
+    console.log(options)
     const res = await fetch(serverUrl + path, options)
     return await res.json()
 }
