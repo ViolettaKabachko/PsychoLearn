@@ -30,34 +30,38 @@ export class DataBaseClient {
     }
 
     async getUserById(id: number) {
+        let res = undefined
         try {
-            return (await this
+            res = (await this
             .client
             .query("SELECT uid, username, surname, email, userrole FROM users WHERE uid = $1", 
                 [id]
-            )).rows;
-        } catch (e) {
-            console.log('\x1b[31m', e);
-        }
-    }
-
-    async getUserByEmail(email: string): Promise<Array<any>> {
-        let res = undefined;
-        try {
-            res = (await this.client.query("SELECT uid, username, surname, email, userrole FROM users WHERE email = $1", [email])).rows;
+            )).rows[0];
         } catch (e) {
             console.log('\x1b[31m', e);
         }
         finally {
-            return res === undefined ? [] : res;
+            return res === undefined ? [] : res
         }
+    }
 
+    async getUserByEmail(email: string): Promise<any> {
+        let res = undefined;
+        try {
+            res = (await this.client.query("SELECT uid, username, surname, email, userpassword, userrole FROM users WHERE email = $1", [email])).rows[0];
+        } catch (e) {
+            console.log('\x1b[31m', e);
+        }
+        finally {
+            return res === undefined ? {} : res;
+        }
+ 
     }
 
     async insertUser(user: User) {
         let res = undefined;
         try {
-            if ((await this.getUserByEmail(user.email))[0]) {
+            if ((await this.getUserByEmail(user.email)).uid !== undefined) {
                 res = {err: "Account with this email already exsists"}
             }
             else {
@@ -66,7 +70,7 @@ export class DataBaseClient {
                 query("insert into users (username, surname, email, userpassword, userrole) values ($1, $2, $3, $4, 1)",
                     [user.name, user.surname, user.email, user.password]
                 )
-                res = {msg: `Accouny has been created for ${user.email}`}
+                res = {msg: `Account has been created for ${user.email}`}
             }
         }
         catch (e) {
@@ -76,6 +80,10 @@ export class DataBaseClient {
         finally {
             return res;
         }
+    }
+
+    async createRefreshSession(user: User) {
+        
     }
 }
 

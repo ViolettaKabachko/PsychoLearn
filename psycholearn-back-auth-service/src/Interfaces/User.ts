@@ -4,3 +4,7 @@ export interface User {
     email: string,
     password: string
 };
+
+export const userGuard = (obj: object): obj is User => {
+    return ["email", "name", "surname", "password"].every(x => Object.getOwnPropertyDescriptor(obj, x) !== undefined)
+}
