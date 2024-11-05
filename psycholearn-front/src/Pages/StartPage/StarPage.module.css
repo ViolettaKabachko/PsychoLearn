@@ -17,9 +17,8 @@ html {
 }
 
 .navbar {
-    grid-column-start: 1;
-    grid-column-end: 6;
-    grid-row: 1 5
+    grid-column: 1 / 6;
+    grid-row: 1 / 2
 }
 
 .title {

@@ -1,39 +1,64 @@
 import React, {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { HttpGet } from '../../requests';
-
-
+import Navbar from '../../Components/UI/Navbar/Navbar'
+import classes from './Profile.module.css'
 
 const Profile = () => {
+    const navigate = useNavigate();
     const {id} = useParams();
+    const [showMenu, setShowMenu] = useState(false);
+    const [uid, setUid] = useState("")
     const [name, setName] = useState("")
     const [surname, setSurame] = useState("")
     const [email, setEmail] = useState("")
     const [role, setRole] = useState(1)
+    const pointers = ["<<", ">>"]
+    const [pointer, setPointer] = useState(pointers[1])
 
-    useEffect(async () => {
-        let res = await HttpGet("/users/" + id, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`})
-        setName(res.username)
-        setSurame(res.surname)
-        if (res.uid === parseInt(localStorage.getItem("id"))) {
-            setEmail(res.email)
-            setRole(res.userrole)
-        }
-        else {
-            setEmail(undefined)
-            setRole(undefined)
-        }
+    useEffect(() => {
+            HttpGet("/users/" + id, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`}).then(res => {
+                console.log(res)
+                if (res.err === undefined) {
+                    setName(res.username)
+                    setSurame(res.surname)
+                    if (res.uid === parseInt(localStorage.getItem("id"))) {
+                        setEmail(res.email)
+                        setRole(res.userrole)
+                        setUid(res.uid)
+                    }
+                    else {
+                        setEmail(undefined)
+                        setRole(undefined)
+                    }
+                }
+                else {
+                    localStorage.clear();
+                    navigate("/start");
+                }
+            })
     }, [])
 
-    console.log(id)
     return (
-        <button onClick={async () => {
-            console.log(name)
-            console.log(surname)
-            console.log(email)
-            console.log(role)
-        }}>
-        </button>
+        <div className={classes.profile}>
+            <div className={classes.navbar}>
+                <Navbar onLogoFunc={() => navigate("/users/" + localStorage.getItem("id"))}></Navbar>
+            </div>
+
+            <div className={uid ? classes.userMenu: classes.userMenuNone}>
+                <div className={showMenu ? classes.backGround + " " + classes.active : classes.backGround}>
+                </div>
+
+                <div className={showMenu ? classes.toggle + " " + classes.active : classes.toggle}>
+                    <div onClick={() => {setShowMenu(!showMenu); setPointer(pointers[+showMenu])}} className={classes.toggleInner}>
+                        {pointer}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
     )
 }
 
