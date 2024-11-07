@@ -9,14 +9,9 @@ export const HttpPost = async (path, body) => {
         body: JSON.stringify(body),
         credentials: "include"
     }
-    try {
         const res = await fetch(serverUrl + path, options)
         return await res.json()
-    }
-    catch (e) {
-        console.log(e)
-    }
-    //finally
+    
 }
 
 export const HttpGet = async (path, headers) => {

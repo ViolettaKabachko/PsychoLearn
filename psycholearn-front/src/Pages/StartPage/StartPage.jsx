@@ -1,5 +1,6 @@
 import {React, useState} from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useFetch } from '../../Hooks/useFetch'
 import Navbar from '../../Components/UI/Navbar/Navbar'
 import classes from './StarPage.module.css'
 import Button from '../../Components/Button/Button'
@@ -25,12 +26,52 @@ const StartPage = () => {
     const [response, setResponse] = useState();
     const [answer, setAnswer] = useState("");
     const [acitveLogIn, setActiveLogIn] = useState(false)
+    const [fetching, loading, error] = useFetch(async () => {
+        let res = await HttpPost("/auth/login", {
+            email: logInEmail,
+            password: logInPassword
+        })
+        if (Object.hasOwn(res, "err"))
+            setResponse(res.err)
+        else {
+            localStorage.setItem("access_token", res.access_token)
+            localStorage.setItem("id", res.id)
+            navigate("/users/" + res.id)
+        }
+        console.log(res)
+     })
 
-  const clear = () => {
+    const [fetching1, loading1, error1] = useFetch(async () => {
+        let salt = await HttpGet("/secure/get_salt")
+        console.log(salt)
+        let res = await HttpPost("/users", {
+        name: name,
+        surname: surname,
+        email: email,
+        password: await bcrypt.hash(password, salt.salt)
+      })
+      setResponse(Object.hasOwn(await res, "msg"));
+      if (Object.hasOwn(await res, "msg")) {
+        setAnswer((await res).msg)
+        setName("")
+        setSurname("")  
+        setEmail("")
+        setPassword("")
+        setRepeatedPassword("")
+      }
+      else {
+        setAnswer((await res).err);
+        setPassword("")
+        setRepeatedPassword("")
+      }
+    }) 
+
+
+    const clear = () => {
     setLogInPassword("");
     setLogInEmail("")
     setResponse("")
-  }
+    }
 
 
   return (
@@ -72,30 +113,7 @@ const StartPage = () => {
             surname.length > 1]
             .reduce((acc, cur) => {return acc + cur}, 0) !== 8} 
 
-            onClick={async () => {
-                let salt = await HttpGet("/secure/get_salt")
-                console.log(salt)
-                let res = await HttpPost("/users", {
-                name: name,
-                surname: surname,
-                email: email,
-                password: await bcrypt.hash(password, salt.salt)
-              })
-              setResponse(Object.hasOwn(await res, "msg"));
-              if (Object.hasOwn(await res, "msg")) {
-                setAnswer((await res).msg)
-                setName("")
-                setSurname("")  
-                setEmail("")
-                setPassword("")
-                setRepeatedPassword("")
-              }
-              else {
-                setAnswer((await res).err);
-                setPassword("")
-                setRepeatedPassword("")
-              }
-            }}
+            onClick={async () => await fetching1()}
            color={{'r': 170, 'g': 218, 'b': 209}}>Sign Up
            </Button>
 
@@ -115,23 +133,11 @@ const StartPage = () => {
             <Button
              disabled={!(validateEmail(logInEmail) && logInPassword.length > 1)} 
              color={{'r': 149, 'g': 237, 'b': 219}} 
-             onClick={async () => {
-                let res = await HttpPost("/auth/login", {
-                    email: logInEmail,
-                    password: logInPassword
-                })
-                if (Object.hasOwn(res, "err"))
-                    setResponse(res.err)
-                else {
-                    localStorage.setItem("access_token", res.access_token)
-                    localStorage.setItem("id", res.id)
-                    navigate("/users/" + res.id)
-                }
-                console.log(res)
-             }}>Sign Up</Button>
+             onClick={async () => await fetching()}>Sign Up</Button>
              
              {response !== undefined && <ValidationLine func={() => false} >{response}</ValidationLine>}
         </ModalWindow>
+        
         <div className={classes.startpage}>
             <div className={classes.navbar}>
                 <Navbar onLogoFunc={() => setActiveLogIn(true)}></Navbar>

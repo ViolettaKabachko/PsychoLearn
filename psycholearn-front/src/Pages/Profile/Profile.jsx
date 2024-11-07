@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 import { HttpGet } from '../../requests';
@@ -20,27 +19,28 @@ const Profile = () => {
     const [pointer, setPointer] = useState(pointers[1])
 
     useEffect(() => {
-            HttpGet("/users/" + id, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`}).then(res => {
-                console.log(res)
-                if (res.err === undefined) {
-                    setName(res.username)
-                    setSurame(res.surname)
-                    if (res.uid === parseInt(localStorage.getItem("id"))) {
-                        setEmail(res.email)
-                        setRole(res.userrole)
-                        setUid(res.uid)
+                HttpGet("/users/" + id, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`}).then(res => {
+                    console.log(res)
+                    if (res.err === undefined) {
+                        setName(res.username)
+                        setSurame(res.surname)
+                        if (res.uid === parseInt(localStorage.getItem("id"))) {
+                            setEmail(res.email)
+                            setRole(res.userrole)
+                            setUid(res.uid)
+                        }
+                        else {
+                            setEmail(undefined)
+                            setRole(undefined)
+                        }
                     }
                     else {
-                        setEmail(undefined)
-                        setRole(undefined)
+                        localStorage.clear();
+                        navigate("/start");
                     }
-                }
-                else {
-                    localStorage.clear();
-                    navigate("/start");
-                }
-            })
-    }, [])
+                })
+        }, []
+    )
 
     return (
         <div className={classes.profile}>
@@ -58,14 +58,13 @@ const Profile = () => {
                 <div>
                     <a className={classes.anc} href="/">Preferences</a>
                 </div>
-                
             </SideBar>
+            
             <div className={classes.toggle}>
                 <div onClick={() => {setShowMenu(!showMenu); setPointer(pointers[+showMenu])}} className={classes.toggleInner}>
                     {pointer}
                 </div>
             </div>
-            
         </div>
     )
 }
