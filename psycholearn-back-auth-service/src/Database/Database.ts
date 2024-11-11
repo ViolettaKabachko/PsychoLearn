@@ -48,7 +48,7 @@ export class DataBaseClient {
     async getUserByEmail(email: string): Promise<any> {
         let res = undefined;
         try {
-            res = (await this.client.query("SELECT uid, username, surname, email, userpassword, userrole FROM users WHERE email = $1", [email])).rows[0];
+            res = (await this.client.query("SELECT uid, username, surname, email, userpassword, userrole, photo FROM users WHERE email = $1", [email])).rows[0];
         } catch (e) {
             console.log('\x1b[31m', e);
         }
@@ -67,7 +67,7 @@ export class DataBaseClient {
             else {
                 await this.
                 client.
-                query("insert into users (username, surname, email, userpassword, userrole) values ($1, $2, $3, $4, 1)",
+                query("insert into users (username, surname, email, userpassword, userrole, photo, about) values ($1, $2, $3, $4, 1, '', '')",
                     [user.name, user.surname, user.email, user.password]
                 )
                 res = {msg: `Account has been created for ${user.email}`}

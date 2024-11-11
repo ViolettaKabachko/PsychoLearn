@@ -4,5 +4,7 @@ create table users (
 	surname varchar(100) not null,
 	email varchar(100) not null,
 	userrole int not null,
-	userpassword text not null
+	userpassword text not null,
+    photo text not null,
+    about varchar(150) not null
 )
