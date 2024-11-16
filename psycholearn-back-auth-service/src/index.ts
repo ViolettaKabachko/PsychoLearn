@@ -4,6 +4,7 @@ import { authRouter } from "./Routers/authRouter";
 import { secureRouter } from "./Routers/secureRouter";
 import dotenv from 'dotenv'
 import cors from 'cors'
+import cookieParser from "cookie-parser";
 
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(cors({
     origin: ["http://localhost:3000"]
 }))
 
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 

@@ -1,11 +1,11 @@
 import {Response, Request} from 'express';
 import { DbClient } from '../Database/DataBaseRunner';
 import { User, userGuard } from '../Interfaces/User';
-import { IJwtPayload } from '../Interfaces/JwtPayload';
 import authController from './authController';
-import { promises } from 'fs'
+import * as jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
-import FileMiddleware from '../../FileMiddleware';
+import { access } from 'fs';
+import { IJwtPayload } from '../Interfaces/JwtPayload';
 
 dotenv.config();
 
@@ -37,7 +37,9 @@ class UserController {
     async getUserById (req: Request, res: Response) {
         console.log('\x1b[36m%s\x1b[0m', `[server]: GET request to /users/${req.params.id}`)
         try {
-            const decoded = await authController.verifyJWT((req.headers.authorization as string).slice(7)) as IJwtPayload
+            console.log(req.cookies)
+            await authController.verifyJWT((req.headers.authorization as string).slice(7), req.cookies["refresh_token"], parseInt(req.params.id))
+            const decoded = jwt.decode((req.headers.authorization as string).slice(7)) as IJwtPayload
             let user = await DbClient.getUserById(parseInt(req.params.id))
             if (decoded.uid === user.uid)
                 res.json(user)
@@ -54,6 +56,7 @@ class UserController {
     async getUsersPhoto(req: Request, res: Response) {
         console.log('\x1b[36m%s\x1b[0m', `[server]: GET request to /users/${req.params.id}/get_photo`)
         try {
+            await authController.verifyJWT((req.headers.authorization as string).slice(7), req.cookies["refresh_token"], parseInt(req.params.id))
             let photo = await DbClient.getUsersPhoto(parseInt(req.params.id))
             if (photo.photo !== undefined)
                 res.sendFile(photo.photo, {root: "../"})
@@ -69,7 +72,7 @@ class UserController {
     async updateUsersPhoto(req: Request, res: Response) {
         console.log('\x1b[36m%s\x1b[0m', `[server]: POST request to /users/${req.params.id}/update_photo`)
         try {
-            const decoded = await authController.verifyJWT((req.headers.authorization as string).slice(7)) as IJwtPayload
+            await authController.verifyJWT((req.headers.authorization as string).slice(7), req.cookies["refresh_token"], parseInt(req.params.id))
             await DbClient.updateUsersPhoto(parseInt(req.params.id), `/pcts/${req.file?.originalname}`)
             res.status(200).json({"msg": "Photo updated"})
         }

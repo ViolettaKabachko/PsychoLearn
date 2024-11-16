@@ -34,7 +34,7 @@ export class DataBaseClient {
         try {
             res = (await this
             .client
-            .query("SELECT uid, username, surname, email, userrole FROM users WHERE uid = $1", 
+            .query("SELECT uid, username, surname, email, userrole, photo FROM users WHERE uid = $1", 
                 [id]
             )).rows[0];
         } catch (e) {
@@ -107,6 +107,19 @@ export class DataBaseClient {
         }
     }
 
+    async getRefreshSession(uid: number) {
+        let res = undefined
+        try {
+            res = (await this.client.query("SELECT * FROM refreshsession WHERE userid = $1", [uid])).rows[0]
+        }
+        catch (e) {
+            console.log("Error occured: " + e)
+        }
+        finally {
+            return res ? res : undefined
+        }
+    }
+
     async createRefreshSession(session: refreshSession): Promise<Boolean> {
         let res: Boolean = false;
         try {
@@ -123,6 +136,18 @@ export class DataBaseClient {
         finally {
             return res;
         }
+    }
+
+    async deleteRefreshSession(userid: number) {
+        let res = false
+        try {
+            await this.client.query("DELETE FROM refreshsession WHERE userid = $1", [userid]);
+            res = true;
+        }
+        catch (e) {
+            console.log("Error occurred: " + e)
+        }
+        return res;
     }
 }
 
