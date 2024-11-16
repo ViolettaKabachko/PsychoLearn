@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
-import { HttpGet } from '../../requests';
+import { HttpGet, HttpGetFile, HttpPost, HttpPostFile } from '../../requests';
 import Navbar from '../../Components/UI/Navbar/Navbar'
 import classes from './Profile.module.css'
 import Button from '../../Components/Button/Button';
 import phot from '../../Images/default.svg'
+import { useFetch } from '../../Hooks/useFetch';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -19,6 +20,17 @@ const Profile = () => {
     const [email, setEmail] = useState("")
     const [role, setRole] = useState(1)
     const [about, setAbout] = useState("")
+
+    const [updatePhoto, loading, error] = useFetch(async () => {
+        let data = new FormData();
+        let file = await fetch(newPhoto).then(r => r.blob()).then(blobFile => new File([blobFile], `user_${id}.jpeg`, { type: "image/jpeg" }))
+        data.append(`users_photo`, file, `user_${id}.jpeg`)
+        let res = await HttpPostFile(`/users/${id}/update_photo`, data, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`})
+        console.log(res);
+        setPhoto(newPhoto);
+        setPhotoChanged(false); 
+        setNewPhoto(undefined);
+    });
 
     const roles = {
         1: "Reader",
@@ -41,6 +53,9 @@ const Profile = () => {
                             setEmail(undefined)
                             setRole(undefined)
                         }
+                        HttpGetFile(`/users/${id}/photo`).then(res => {
+                            console.log(res.blob().then(r => setPhoto(URL.createObjectURL(r))))
+                        })
                     }
                     else {
                         localStorage.clear();
@@ -67,6 +82,7 @@ const Profile = () => {
                          accept="image/jpeg" 
                          onChange={(e) => {
                             if (e.target.files[0]) {
+                                console.log(e.target.files[0])
                                 setNewPhoto(URL.createObjectURL(e.target.files[0]))
                                 setPhotoChanged(true)
                             }
@@ -79,7 +95,7 @@ const Profile = () => {
                     {/* "request to update photo";  */}
                     {photoChanged && <div className={classes.acceptLine}>
                         <div style={{color: "green"}}>
-                            <span onClick={() => {setPhoto(newPhoto); setPhotoChanged(false); setNewPhoto(undefined)}} className={classes.confirmBtn}> 
+                            <span onClick={async () => {await updatePhoto()}} className={classes.confirmBtn}> 
                                 {"✔"}
                             </span>
                         </div>

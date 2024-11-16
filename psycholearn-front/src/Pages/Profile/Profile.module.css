@@ -40,7 +40,7 @@
     position: relative;
 }
 
-
+/* сделать класс для владельца аккаунта и нет*/
 .profilePhoto:after {
     content: 'Upload photo'; 
     font-size: 20px;
