@@ -53,8 +53,8 @@ const Profile = () => {
                             setEmail(undefined)
                             setRole(undefined)
                         }
-                        HttpGetFile(`/users/${id}/photo`).then(res => {
-                            console.log(res.blob().then(r => setPhoto(URL.createObjectURL(r))))
+                        HttpGetFile(`/users/${id}/photo`, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`}).then(res => {
+                            res.blob().then(r => setPhoto(URL.createObjectURL(r)))
                         })
                     }
                     else {
@@ -62,7 +62,7 @@ const Profile = () => {
                         navigate("/start");
                     }
                 })
-        }, []
+        }, [localStorage.length]
     )
     
     useEffect(() => {
@@ -132,7 +132,14 @@ const Profile = () => {
             
 
             <div className={classes.statsBlock}>
+                <div onClick={
+                    () => 
+                    HttpGet(`/auth/${id}/logout`, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`})
+                    .then(r => {if (r["err"] === undefined)
+                        localStorage.clear()
+                    })} className={classes.logout}>
 
+                </div>
             </div>
         </div>
         

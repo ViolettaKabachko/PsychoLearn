@@ -1,5 +1,5 @@
 import {React, useState} from 'react'
-import { useNavigate } from 'react-router-dom'
+import { replace, useNavigate } from 'react-router-dom'
 import { useFetch } from '../../Hooks/useFetch'
 import Navbar from '../../Components/UI/Navbar/Navbar'
 import classes from './StarPage.module.css'
@@ -140,7 +140,11 @@ const StartPage = () => {
         
         <div className={classes.startpage}>
             <div className={classes.navbar}>
-                <Navbar onLogoFunc={() => setActiveLogIn(true)}></Navbar>
+                <Navbar 
+                onLogoFunc={
+                    () => 
+                    localStorage.getItem("access_token)") === undefined ? setActiveLogIn(true) : 
+                    navigate(`../users/${localStorage.getItem("id")}`, {relative: "path"})}></Navbar>
             </div>
 
             <div className={classes.title}>
