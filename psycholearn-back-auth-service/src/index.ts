@@ -4,7 +4,7 @@ import { authRouter } from "./Routers/authRouter";
 import { secureRouter } from "./Routers/secureRouter";
 import dotenv from 'dotenv'
 import cors from 'cors'
-import bodyParser from "body-parser";
+
 
 dotenv.config();
 
@@ -14,6 +14,7 @@ app.use(cors({
     credentials: true,
     origin: ["http://localhost:3000"]
 }))
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 

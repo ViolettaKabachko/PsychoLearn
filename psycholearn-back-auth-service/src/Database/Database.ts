@@ -1,7 +1,7 @@
 import { Client } from "pg"
 import { Config } from "../Interfaces/Config";
 import { User } from "../Interfaces/User";
-import { createHash } from "crypto";
+import { refreshSession } from "../Interfaces/refreshSession";
 
 
 export class DataBaseClient {
@@ -48,14 +48,13 @@ export class DataBaseClient {
     async getUserByEmail(email: string): Promise<any> {
         let res = undefined;
         try {
-            res = (await this.client.query("SELECT uid, username, surname, email, userpassword, userrole, photo FROM users WHERE email = $1", [email])).rows[0];
+            res = (await this.client.query("SELECT uid, username, surname, email, userpassword, userrole FROM users WHERE email = $1", [email])).rows[0];
         } catch (e) {
             console.log('\x1b[31m', e);
         }
         finally {
             return res === undefined ? {} : res;
         }
- 
     }
 
     async insertUser(user: User) {
@@ -82,8 +81,48 @@ export class DataBaseClient {
         }
     }
 
-    async createRefreshSession(user: User) {
-        
+    async updateUsersPhoto(uid: number, pathToPhoto: string): Promise<Boolean> {
+        let res: Boolean = false;
+        try {
+            await this.client.query("UPDATE users SET photo = $1 WHERE uid = $2", [pathToPhoto, uid])
+            res = true;
+        }
+        catch (e) {
+            console.log("Error was occurred " + e);
+        }
+        finally {
+            return res;
+        }
+    }
+
+    async getUsersPhoto(uid: number) {
+        let res = undefined;
+        try {
+            res = (await this.client.query("SELECT photo FROM users WHERE uid = $1", [uid])).rows[0];
+        } catch (e) {
+            console.log('\x1b[31m', e);
+        }
+        finally {
+            return res === undefined ? {} : res;
+        }
+    }
+
+    async createRefreshSession(session: refreshSession): Promise<Boolean> {
+        let res: Boolean = false;
+        try {
+            await this
+            .client
+            .query(
+                "INSERT INTO refreshsession (userid, refreshtoken, createdat, expiresat) VALUES ($1, $2, $3, $4)"
+                , [session.userid, session.refreshToken, session.createdAt, session.expiresAt])
+            res = true;
+        }
+        catch (e) {
+            console.log("Error was occurred " + e);
+        }
+        finally {
+            return res;
+        }
     }
 }
 
