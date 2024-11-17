@@ -13,6 +13,7 @@ class authController {
     static async verifyJWT(accessToken: string, refreshToken: string, uid: number) {
         try {
             jwt.verify(accessToken, process.env.SECRET_KEY as string) as IJwtPayload
+            console.log("Access token is alive")
             return {accessToken: accessToken};
         }
         catch (e){
@@ -27,7 +28,7 @@ class authController {
                     try {
                         // если не протух рефреш
                         jwt.verify(refreshSession.refreshtoken, process.env.SECRET_KEY as string)
-                        let date = Date.now()
+                        let date = Math.ceil(Date.now() / 1000)
                         let newAccess = jwt.sign({...user, "exp": date + parseInt(process.env.ACCESS_TOKEN_LIFE as string)}, process.env.SECRET_KEY as string)
                         let newRefresh = jwt.sign({...user, "exp": date + parseInt(process.env.REFRESH_TOKEN_LIFE as string)}, process.env.SECRET_KEY as string)
                         await DbClient.deleteRefreshSession(user.uid)
@@ -37,16 +38,23 @@ class authController {
                             createdAt: date,
                             expiresAt: date + parseInt(process.env.REFRESH_TOKEN_LIFE as string)
                         })
+                        console.log("new refresh: " + newRefresh)
+                        console.log("New pair of tokens created")
                         return {
                             accessToken: newAccess,
                             refreshToken: newRefresh
                         }
                     }
+                    
                     catch (e) {
                         console.log("Error when verifying a refresh token: " + e)
                         await DbClient.deleteRefreshSession(user.uid)
                         throw e;
                     }
+                }
+                else {
+                    console.log("Refresh token does not match the DB's")
+                    throw new JsonWebTokenError("Refresh token does not match the DB's");
                 }
             }
             else if (error.name === "JsonWebTokenError") {
@@ -61,16 +69,16 @@ class authController {
     } 
 
     static async login(req: Request, res: Response) {
-        console.log('\x1b[36m%s\x1b[0m', "[server]: POST request to /auth/login")
         console.log(req.body)
         try {
-            let date = Date.now()
+            let date = Math.ceil(Date.now() / 1000)
+            console.log(date)
             let user = await DbClient.getUserByEmail(req.body.email)
             console.log(user)
             if (await bcrypt.compare(req.body.password, user.userpassword)) {
                 delete user.userpassword
-                let payload = {...user, "exp": date + (3 * 3600) * 1000}
-                let refresh_token = jwt.sign({...user, "exp": date + (7 * 24 * 3600) * 1000}, process.env.SECRET_KEY as string)
+                let payload = {...user, "exp": date + parseInt(process.env.ACCESS_TOKEN_LIFE as string)}
+                let refresh_token = jwt.sign({...user, "exp": date + parseInt(process.env.REFRESH_TOKEN_LIFE as string)}, process.env.SECRET_KEY as string)
                 if (await DbClient.getRefreshSession(user.uid)) {
                     res.status(409).json({"err": "User is already logged in"})
                     return
@@ -80,12 +88,12 @@ class authController {
                         userid: user.uid,
                         refreshToken: refresh_token,
                         createdAt: date,
-                        expiresAt: date + (7 * 24 * 3600) * 1000
+                        expiresAt: date + parseInt(process.env.REFRESH_TOKEN_LIFE as string)
                     })
                     res.status(200)
                     .cookie("refresh_token",
                         refresh_token,
-                    {maxAge: date + (7 * 24 * 3600) * 1000})
+                    {maxAge: date + parseInt(process.env.REFRESH_TOKEN_LIFE as string)})
                     .json({ 
                         "msg": "Logged in successfully",
                         "id": user.uid,
@@ -104,20 +112,6 @@ class authController {
             res.status(401).json({
                 "err": "Account with this email does not exists"
             })
-        }
-    }
-
-    static async logout(req: Request, res: Response) {
-        console.log("[server]: GET to /auth/logout")
-        try {
-            await authController.verifyJWT((req.headers.authorization as string).slice(7), req.cookies["refresh_token"], parseInt(req.params.id))
-            const decoded = jwt.decode((req.headers.authorization as string).slice(7)) as IJwtPayload
-            await DbClient.deleteRefreshSession(decoded.uid)
-            res.status(200).json({"msg": "Logged out"})
-        }
-        catch (e) {
-            console.log("Error was occured" + e)
-            res.status(401).json({"err": "Error whe log out"})
         }
     }
 }

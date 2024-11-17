@@ -4,5 +4,3 @@ import authController from '../Controllers/authController';
 export const authRouter = Router();
 
 authRouter.post("/login", authController.login)
-
-authRouter.get("/:id/logout", authController.logout)
