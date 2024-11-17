@@ -48,6 +48,8 @@ const Profile = () => {
                             setEmail(res.email)
                             setRole(res.userrole)
                             setUid(res.uid)
+                            if (res.access_token !== undefined)
+                                localStorage.setItem("access_token", res.access_token)
                         }
                         else {
                             setEmail(undefined)
@@ -62,7 +64,7 @@ const Profile = () => {
                         navigate("/start");
                     }
                 })
-        }, [localStorage.length]
+        }, []
     )
     
     useEffect(() => {
@@ -134,15 +136,17 @@ const Profile = () => {
             <div className={classes.statsBlock}>
                 <div onClick={
                     () => 
-                    HttpGet(`/auth/${id}/logout`, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`})
-                    .then(r => {if (r["err"] === undefined)
+                    HttpGet(`/users/${id}/logout`, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`})
+                    .then(r => {if (r["err"] === undefined) {
                         localStorage.clear()
+                        document.cookie = "refresh_token" + "=1;expires=Thu, 01 Jan 1970 00:00:00 GMT';"
+                        navigate("/start")
+                    }
                     })} className={classes.logout}>
 
                 </div>
             </div>
         </div>
-        
     )
 }
 export default Profile;
