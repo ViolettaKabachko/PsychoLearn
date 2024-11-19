@@ -37,7 +37,8 @@ class UserController {
             //await authController.verifyJWT((req.headers.authorization as string).slice(7), req.cookies["refresh_token"], parseInt(req.params.id))
             const decoded = jwt.decode((req.headers.authorization as string).slice(7)) as IJwtPayload
             let user = await DbClient.getUserById(parseInt(req.params.id))
-            res.json({...user, ...res.locals.resBody})
+            let body = {...user, ...res.locals.resBody, "is_page_owner": decoded.uid === parseInt(req.params.id)} 
+            res.status(200).json(body)
             
         }
         catch (e) {
@@ -49,7 +50,7 @@ class UserController {
         try {
             // await authController.verifyJWT((req.headers.authorization as string).slice(7), req.cookies["refresh_token"], parseInt(req.params.id))
             let photo = await DbClient.getUsersPhoto(parseInt(req.params.id))
-            if (photo.photo !== undefined)
+            if (photo.photo !== "")
                 res.sendFile(photo.photo, {root: "../"})
             else
                 res.sendFile("pcts/default.svg", {root: "../"})
