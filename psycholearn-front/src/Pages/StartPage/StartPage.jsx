@@ -77,47 +77,46 @@ const StartPage = () => {
   return (
     <div className={classes.firstBlock}>
         <ModalWindow active={active} setActive={setActive}>
-          <div onClick={() => {setActive(false); setAnswer("")}} className={classes.backCross}>
-          </div>
+            <div onClick={() => {setActive(false); setAnswer("")}} className={classes.backCross}>
+            </div>
 
-          <div className={classes.signUpTitle}>
-            Sign up
-          </div>
+            <div className={classes.signUpTitle}>
+                Sign up
+            </div>
 
-          <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)}></Input>
-          <Input placeholder="Surname" value={surname} onChange={(e) => setSurname(e.target.value)}></Input>
-          <Input placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)}></Input>
-          {email.length !== 0 && 
-          <ValidationLine text={email} func={(text) => validateEmail(text)}>Correct email</ValidationLine>
-          }
-          <Input placeholder="Password" type="password" value={password} onChange={(e) => {setPassword(e.target.value); setFirtsPasswordEnter(true)}}></Input>
-          <Input placeholder="Repeat password" type="password" value={repeatedPassword} onChange={(e) => setRepeatedPassword(e.target.value)}></Input>
-          
-          {firstPasswordEnter && (password.length !== 0 || repeatedPassword.length !== 0) && 
-          <div className={classes.validations}>
-            <ValidationLine text={password} func={(text) => hasEnoughLength(6, text)}>Length has to be more than 6</ValidationLine>
-            <ValidationLine text={password} func={(text) => hasDigits(text)}>Has to be at least 1 digit</ValidationLine>
-            <ValidationLine text={password} func={(text) => hasLowerLetter(text)}>Has to be at least 1 low letter</ValidationLine>
-            <ValidationLine text={password} func={(text) => hasCapitalLetters(text)}>Has to be at least 1 capital letter</ValidationLine>
-            {(password.length !== 0 || repeatedPassword.length !== 0) && <ValidationLine text={repeatedPassword} func={(repeatedPassword) => passwordAreTheSame(password, repeatedPassword)}>Passwords have to match</ValidationLine>}
-            </div>}
+                <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)}></Input>
+                <Input placeholder="Surname" value={surname} onChange={(e) => setSurname(e.target.value)}></Input>
+                <Input placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)}></Input>
+                {email.length !== 0 && 
+                <ValidationLine text={email} func={(text) => validateEmail(text)}>Correct email</ValidationLine>
+                }
+                <Input placeholder="Password" type="password" value={password} onChange={(e) => {setPassword(e.target.value); setFirtsPasswordEnter(true)}}></Input>
+                <Input placeholder="Repeat password" type="password" value={repeatedPassword} onChange={(e) => setRepeatedPassword(e.target.value)}></Input>
             
-          <Button
-           disabled={[hasCapitalLetters(password),
-            hasDigits(password), 
-            hasEnoughLength(6, password), 
-            hasLowerLetter(password), 
-            passwordAreTheSame(password, repeatedPassword),
-            validateEmail(email),
-            name.length > 1,
-            surname.length > 1]
-            .reduce((acc, cur) => {return acc + cur}, 0) !== 8} 
+                {firstPasswordEnter && (password.length !== 0 || repeatedPassword.length !== 0) && 
+                <div className={classes.validations}>
+                    <ValidationLine text={password} func={(text) => hasEnoughLength(6, text)}>Length has to be more than 6</ValidationLine>
+                    <ValidationLine text={password} func={(text) => hasDigits(text)}>Has to be at least 1 digit</ValidationLine>
+                    <ValidationLine text={password} func={(text) => hasLowerLetter(text)}>Has to be at least 1 low letter</ValidationLine>
+                    <ValidationLine text={password} func={(text) => hasCapitalLetters(text)}>Has to be at least 1 capital letter</ValidationLine>
+                    {(password.length !== 0 || repeatedPassword.length !== 0) && <ValidationLine text={repeatedPassword} func={(repeatedPassword) => passwordAreTheSame(password, repeatedPassword)}>Passwords have to match</ValidationLine>}
+                </div>}
+                    
+                <Button
+                disabled={[hasCapitalLetters(password),
+                    hasDigits(password), 
+                    hasEnoughLength(6, password), 
+                    hasLowerLetter(password), 
+                    passwordAreTheSame(password, repeatedPassword),
+                    validateEmail(email),
+                    name.length > 1,
+                    surname.length > 1]
+                    .reduce((acc, cur) => {return acc + cur}, 0) !== 8} 
 
-            onClick={async () => await fetching1()}
-           color={{'r': 170, 'g': 218, 'b': 209}}>Sign Up
-           </Button>
-
-          {response !== undefined && <ValidationLine func={() => response}>{answer}</ValidationLine>}
+                    onClick={async () => await fetching1()}
+                color={{'r': 170, 'g': 218, 'b': 209}}>Sign Up
+                </Button>
+                {response !== undefined && <ValidationLine func={() => response}>{answer}</ValidationLine>}
         </ModalWindow>
 
         <ModalWindow active={acitveLogIn} setActive={setActiveLogIn}>

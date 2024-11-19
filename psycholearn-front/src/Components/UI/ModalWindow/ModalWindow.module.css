@@ -27,3 +27,7 @@
     border-radius: 12px;
     background-color: white;
 }
+
+.modal_content > input {
+    margin: 5%;
+}

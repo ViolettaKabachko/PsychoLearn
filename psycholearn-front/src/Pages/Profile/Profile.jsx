@@ -7,6 +7,7 @@ import classes from './Profile.module.css'
 import Button from '../../Components/Button/Button';
 import phot from '../../Images/default.svg'
 import { useFetch } from '../../Hooks/useFetch';
+import Input from '../../Components/Input/Input.jsx'
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -16,10 +17,12 @@ const Profile = () => {
     const [photoChanged, setPhotoChanged] = useState(false)
     const [uid, setUid] = useState("")
     const [name, setName] = useState("")
+    const [isPageOwner, setIsPageOwner] = useState(false)
     const [surname, setSurame] = useState("")
     const [email, setEmail] = useState("")
     const [role, setRole] = useState(1)
     const [about, setAbout] = useState("")
+    const [isChanging, setIsChanging] = useState(false)
 
     const [updatePhoto, loading, error] = useFetch(async () => {
         let data = new FormData();
@@ -43,18 +46,14 @@ const Profile = () => {
                     console.log(res)
                     if (res.err === undefined) {
                         setName(res.username)
-                        setSurame(res.surname)   
-                        if (res.uid === parseInt(localStorage.getItem("id"))) {
-                            setEmail(res.email)
-                            setRole(res.userrole)
-                            setUid(res.uid)
-                            if (res.access_token !== undefined)
-                                localStorage.setItem("access_token", res.access_token)
-                        }
-                        else {
-                            setEmail(undefined)
-                            setRole(undefined)
-                        }
+                        setSurame(res.surname)
+                        setEmail(res.email)
+                        setRole(res.userrole)
+                        setUid(res.uid)
+                        setIsPageOwner(res.is_page_owner)
+                        if (res.access_token !== undefined)
+                            localStorage.setItem("access_token", res.access_token)
+                        
                         HttpGetFile(`/users/${id}/photo`, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`}).then(res => {
                             res.blob().then(r => setPhoto(URL.createObjectURL(r)))
                         })
@@ -75,11 +74,11 @@ const Profile = () => {
         <div className={classes.wrap}>
             <div className={classes.profile}>
                 <div className={classes.navbar}>
-                    <Navbar onLogoFunc={() => navigate("/users/" + localStorage.getItem("id"))}></Navbar>
+                    <Navbar onLogoFunc={() => {navigate("/users/" + localStorage.getItem("id")); navigate(0)}}></Navbar>
                 </div>
 
                 <div className={classes.mainBlock}>
-                    <div style={{'--photo-url': `url(${newPhoto === undefined ? photo : newPhoto})`}} className={classes.profilePhoto}>
+                    <div style={{'--photo-url': `url(${newPhoto === undefined ? photo : newPhoto})`}} className={isPageOwner ? classes.profilePhoto + ' ' + classes.owned : classes.profilePhoto}>
                         <input
                          accept="image/jpeg" 
                          onChange={(e) => {
@@ -92,9 +91,9 @@ const Profile = () => {
                                 console.log("No file choosen")
                             e.target.value = "";
 
-                         }}  className={classes.fileInput} type='file'></input>
+                         }}  className={isPageOwner ? classes.fileInput + ' ' + classes.owned : classes.fileInput} type='file'></input>
                     </div>
-                    {/* "request to update photo";  */}
+
                     {photoChanged && <div className={classes.acceptLine}>
                         <div style={{color: "green"}}>
                             <span onClick={async () => {await updatePhoto()}} className={classes.confirmBtn}> 
@@ -110,31 +109,49 @@ const Profile = () => {
 
                     <div className={classes.userInfo}>
                         <div style={{fontSize: "40px"}}>
-                            {`${name} ${surname}`}
+                            {isChanging ? 
+                                <Input style={{fontSize: "40px"}} value={name}></Input> : 
+                                <div>
+                                    {`${name} ${surname}`}
+                                </div>
+                            }
+                        </div>
+                        
+                        <div style={{fontSize: "40px"}}>
+                            {isChanging ? 
+                                <Input style={{fontSize: "32px"}} value={email}></Input> :
+                                <div style={{fontSize: "32px"}}>
+                                    {email}
+                                </div>
+                            }
                         </div>
                         
                         <div style={{fontSize: "32px"}}>
-                            {email}
+                            {isChanging ? 
+                                <Input style={{fontSize: "32px"}} value={roles[role]}></Input> :
+                                <div style={{fontSize: "32px"}}>
+                                    {roles[role]}
+                                </div>
+                            }
                         </div>
-
-                        <div style={{fontSize: "32px"}}>
-                            {roles[role]}
-                        </div>
-
-                        <div style={{fontSize: "32px"}}>
-                            {`About: ${about}`}
+                        {/* {сделать текстареа} */}
+                        <div style={{fontSize: "32px", display: "flex", "flexDirection": "row"}}>
+                                <div style={{fontSize: "32px"}}>
+                                    {`About: ${about}`}
+                                </div>
+                                {isChanging ? <Input style={{fontSize: "32px"}} value={about}></Input> : ""}
                         </div>
                     </div>
 
-                    <div className={classes.editButton}>
-                        <Button disabled={false} color={{'r': 149, 'g': 237, 'b': 219}}>Edit profile</Button>
-                    </div>
+                    {isPageOwner && <div className={classes.editButton}>
+                        <Button onClick={() => setIsChanging(!isChanging)} disabled={false} color={{'r': 149, 'g': 237, 'b': 219}}>{isChanging ? "Confirm changes" : "Edit profile"}</Button>
+                    </div>}
                 </div>
             </div>
             
 
             <div className={classes.statsBlock}>
-                <div onClick={
+                {isPageOwner && <div onClick={
                     () => 
                     HttpGet(`/users/${id}/logout`, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`})
                     .then(r => {if (r["err"] === undefined) {
@@ -143,8 +160,7 @@ const Profile = () => {
                         navigate("/start")
                     }
                     })} className={classes.logout}>
-
-                </div>
+                </div>}
             </div>
         </div>
     )
