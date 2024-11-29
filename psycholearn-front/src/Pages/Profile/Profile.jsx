@@ -8,6 +8,7 @@ import Button from '../../Components/Button/Button';
 import phot from '../../Images/default.svg'
 import { useFetch } from '../../Hooks/useFetch';
 import Input from '../../Components/Input/Input.jsx'
+import ModalWindow from "../../Components/UI/ModalWindow/ModalWindow";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -42,27 +43,27 @@ const Profile = () => {
     }
 
     useEffect(() => {
-                HttpGet("/users/" + id, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`}).then(res => {
-                    console.log(res)
-                    if (res.err === undefined) {
-                        setName(res.username)
-                        setSurame(res.surname)
-                        setEmail(res.email)
-                        setRole(res.userrole)
-                        setUid(res.uid)
-                        setIsPageOwner(res.is_page_owner)
-                        if (res.access_token !== undefined)
-                            localStorage.setItem("access_token", res.access_token)
-                        
-                        HttpGetFile(`/users/${id}/photo`, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`}).then(res => {
-                            res.blob().then(r => setPhoto(URL.createObjectURL(r)))
-                        })
-                    }
-                    else {
-                        localStorage.clear();
-                        navigate("/start");
-                    }
-                })
+            HttpGet("/users/" + id, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`}).then(res => {
+                console.log(res)
+                if (res.err === undefined) {
+                    setName(res.username)
+                    setSurame(res.surname)
+                    setEmail(res.email)
+                    setRole(res.userrole)
+                    setUid(res.uid)
+                    setIsPageOwner(res.is_page_owner)
+                    if (res.access_token !== undefined)
+                        localStorage.setItem("access_token", res.access_token)
+
+                    HttpGetFile(`/users/${id}/photo`, {"Authorization": `Bearer ${localStorage.getItem("access_token")}`}).then(res => {
+                        res.blob().then(r => setPhoto(URL.createObjectURL(r)))
+                    })
+                }
+                else {
+                    localStorage.clear();
+                    navigate("/start");
+                }
+            })
         }, []
     )
     
@@ -72,6 +73,11 @@ const Profile = () => {
 
     return (
         <div className={classes.wrap}>
+            <ModalWindow>
+                <Input placeholder="Name"></Input>
+                <Input placeholder="Surname"></Input>
+
+            </ModalWindow>
             <div className={classes.profile}>
                 <div className={classes.navbar}>
                     <Navbar onLogoFunc={() => {navigate("/users/" + localStorage.getItem("id")); navigate(0)}}></Navbar>
@@ -109,42 +115,33 @@ const Profile = () => {
 
                     <div className={classes.userInfo}>
                         <div style={{fontSize: "40px"}}>
-                            {isChanging ? 
-                                <Input style={{fontSize: "40px"}} value={name}></Input> : 
-                                <div>
-                                    {`${name} ${surname}`}
-                                </div>
-                            }
-                        </div>
-                        
-                        <div style={{fontSize: "40px"}}>
-                            {isChanging ? 
-                                <Input style={{fontSize: "32px"}} value={email}></Input> :
-                                <div style={{fontSize: "32px"}}>
-                                    {email}
-                                </div>
-                            }
+                            <div>
+                                {`${name} ${surname}`}
+                            </div>
                         </div>
                         
                         <div style={{fontSize: "32px"}}>
-                            {isChanging ? 
-                                <Input style={{fontSize: "32px"}} value={roles[role]}></Input> :
+                            {email}
+                        </div>
+
+                        <div style={{fontSize: "32px"}}>
                                 <div style={{fontSize: "32px"}}>
                                     {roles[role]}
                                 </div>
-                            }
                         </div>
                         {/* {сделать текстареа} */}
-                        <div style={{fontSize: "32px", display: "flex", "flexDirection": "row"}}>
-                                <div style={{fontSize: "32px"}}>
-                                    {`About: ${about}`}
-                                </div>
-                                {isChanging ? <Input style={{fontSize: "32px"}} value={about}></Input> : ""}
+                        <div style={{fontSize: "32px"}}>
+                            {`About: ${about}`}
                         </div>
                     </div>
 
                     {isPageOwner && <div className={classes.editButton}>
-                        <Button onClick={() => setIsChanging(!isChanging)} disabled={false} color={{'r': 149, 'g': 237, 'b': 219}}>{isChanging ? "Confirm changes" : "Edit profile"}</Button>
+                        <Button onClick={
+                            () => setIsChanging(true)}
+                                disabled={false}
+                                color={{'r': 149, 'g': 237, 'b': 219}}>
+                            {"Edit profile"}
+                        </Button>
                     </div>}
                 </div>
             </div>
