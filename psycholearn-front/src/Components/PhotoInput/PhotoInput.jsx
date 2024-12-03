@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import classes from "./PhotoInput.module.css";
 import phot from "../../Images/default.svg";
 import { useFetch } from "../../Hooks/useFetch";
 import { HttpGetFile, HttpPostFile } from "../../requests";
 import { useParams } from "react-router-dom";
+import { PageOwnerContext } from "../../Contexts/PageOwnerContext";
 
 const PhotoInput = ({ ...props }) => {
   const { id } = useParams();
+  const { isPageOwner } = useContext(PageOwnerContext);
   const [photo, setPhoto] = useState(phot);
   const [newPhoto, setNewPhoto] = useState();
   const [photoChanged, setPhotoChanged] = useState(false);
@@ -22,51 +24,52 @@ const PhotoInput = ({ ...props }) => {
     let res = await HttpPostFile(`/users/${id}/update_photo`, data, {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     });
-    console.log(res);
     setPhoto(newPhoto);
     setPhotoChanged(false);
     setNewPhoto(undefined);
   });
 
   useEffect(() => {
-    console.log(props.isPageOwner);
     HttpGetFile(`/users/${id}/photo`, {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     }).then((res) => {
-      res.blob().then((r) => setPhoto(URL.createObjectURL(r)));
+      res.blob().then((r) => {
+        console.log(isPageOwner);
+        setPhoto(URL.createObjectURL(r));
+      });
     });
   }, []);
 
-  useEffect(() => {
-    console.log(newPhoto);
-  }, [newPhoto]);
-
   return (
-    <div
-      style={{
-        "--photo-url": `url(${newPhoto === undefined ? photo : newPhoto})`,
-      }}
-      className={
-        props.isPageOwner
-          ? classes.profilePhoto + " " + classes.owned
-          : classes.profilePhoto
-      }
-    >
-      <input
-        accept="image/jpeg"
-        onChange={(e) => {
-          if (e.target.files[0]) {
-            console.log(e.target.files[0]);
-            setNewPhoto(URL.createObjectURL(e.target.files[0]));
-            setPhotoChanged(true);
-          } else console.log("No file chosen");
-          e.target.value = "";
+    <>
+      <div
+        style={{
+          "--photo-url": `url(${newPhoto === undefined ? photo : newPhoto})`,
         }}
         className={
-          props.isPageOwner ? classes.fileInputOwner : classes.fileInput
+          isPageOwner
+            ? classes.profilePhoto + " " + classes.owned
+            : classes.profilePhoto
         }
-        type="file"
-      ></input>
+      >
+        <input
+          accept="image/jpeg"
+          onChange={(e) => {
+            if (e.target.files[0]) {
+              console.log(e.target.files[0]);
+              setNewPhoto(URL.createObjectURL(e.target.files[0]));
+              setPhotoChanged(true);
+            } else console.log("No file chosen");
+            e.target.value = "";
+          }}
+          className={
+            isPageOwner
+              ? classes.fileInput + " " + classes.owner
+              : classes.fileInput
+          }
+          type="file"
+        ></input>
+      </div>
       {photoChanged && (
         <div className={classes.acceptLine}>
           <div style={{ color: "green" }}>
@@ -90,7 +93,7 @@ const PhotoInput = ({ ...props }) => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

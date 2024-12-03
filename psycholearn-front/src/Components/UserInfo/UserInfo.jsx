@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import classes from "./UserInfo.module.css";
 import { useFetch } from "../../Hooks/useFetch";
 import { HttpGet } from "../../requests";
 import { useNavigate, useParams } from "react-router-dom";
+import { PageOwnerContext } from "../../Contexts/PageOwnerContext";
 
 const UserInfo = ({ ...props }) => {
   const { id } = useParams();
+  const { setIsPageOwner } = useContext(PageOwnerContext);
   const navigate = useNavigate();
   const [uid, setUid] = useState("");
   const [name, setName] = useState("");
@@ -30,7 +32,7 @@ const UserInfo = ({ ...props }) => {
         setRole(res.userrole);
         setUid(res.uid);
         setAbout(res.about);
-        props.setIsPageOwner(res.is_page_owner);
+        setIsPageOwner(res.is_page_owner);
         if (res.access_token !== undefined)
           localStorage.setItem("access_token", res.access_token);
       } else {

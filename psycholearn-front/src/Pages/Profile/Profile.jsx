@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { HttpGet } from "../../requests";
 import Navbar from "../../Components/UI/Navbar/Navbar";
@@ -8,20 +8,13 @@ import Input from "../../Components/Input/Input.jsx";
 import ModalWindow from "../../Components/UI/ModalWindow/ModalWindow";
 import PhotoInput from "../../Components/PhotoInput/PhotoInput";
 import UserInfo from "../../Components/UserInfo/UserInfo";
+import { PageOwnerContext } from "../../Contexts/PageOwnerContext";
 
 const Profile = () => {
-  const [isPageOwner, setIsPageOwner] = useState(false);
+  const { isPageOwner, setIsPageOwner } = useContext(PageOwnerContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [isChanging, setIsChanging] = useState(false);
-
-  useEffect(() => {
-    // HttpGet(`/users/${id}`, {
-    //   Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    // }).then((r) => {
-    //   setIsPageOwner(r.is_page_owner);
-    // });
-  }, []);
 
   return (
     <div className={classes.wrap}>
@@ -40,9 +33,8 @@ const Profile = () => {
         </div>
 
         <div className={classes.mainBlock}>
-          <UserInfo setIsPageOwner={setIsPageOwner} />
-          <PhotoInput isPageOwner={isPageOwner} />
-
+          <UserInfo />
+          <PhotoInput />
           {isPageOwner && (
             <div className={classes.editButton}>
               <Button
