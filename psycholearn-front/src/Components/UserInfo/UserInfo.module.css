@@ -1,0 +1,10 @@
+.userInfo {
+    display: flex;
+    grid-row: 2 / 4;
+    grid-column: 1 / 6;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: rgba(149, 237, 219, 0.596);
+    padding-left: 10%;
+}

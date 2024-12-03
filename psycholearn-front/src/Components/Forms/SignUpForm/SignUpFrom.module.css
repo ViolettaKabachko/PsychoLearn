@@ -1,0 +1,28 @@
+.validations {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-bottom: 5%;
+}
+
+.backCross {
+    background-color: white;
+    transition: all ease-in-out 0.2s;
+    border-radius: 7px;
+}
+.backCross::after {
+    font-size: 26px;
+    display: inline-block;
+    content: "\00d7";
+}
+
+.backCross:hover {
+    background-color: red;
+    color: white;
+    cursor: pointer;
+}
+
+.signUpTitle {
+    margin: 0 0 5% 5%;
+    font-weight: bold;
+}

@@ -54,6 +54,7 @@ class authController {
                 }
                 else {
                     console.log("Refresh token does not match the DB's")
+                    await DbClient.deleteRefreshSession(user.uid)
                     throw new JsonWebTokenError("Refresh token does not match the DB's");
                 }
             }
