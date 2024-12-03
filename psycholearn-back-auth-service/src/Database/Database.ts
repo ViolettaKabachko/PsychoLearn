@@ -34,7 +34,7 @@ export class DataBaseClient {
         try {
             res = (await this
             .client
-            .query("SELECT uid, username, surname, email, userrole, photo FROM users WHERE uid = $1", 
+            .query("SELECT uid, username, surname, email, userrole, photo, about FROM users WHERE uid = $1", 
                 [id]
             )).rows[0];
         } catch (e) {
@@ -48,7 +48,7 @@ export class DataBaseClient {
     async getUserByEmail(email: string): Promise<any> {
         let res = undefined;
         try {
-            res = (await this.client.query("SELECT uid, username, surname, email, userpassword, userrole FROM users WHERE email = $1", [email])).rows[0];
+            res = (await this.client.query("SELECT uid, username, surname, email, userpassword, userrole, about FROM users WHERE email = $1", [email])).rows[0];
         } catch (e) {
             console.log('\x1b[31m', e);
         }
