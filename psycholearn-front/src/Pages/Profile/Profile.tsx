@@ -4,7 +4,7 @@ import { HttpGet } from "../../requests";
 import Navbar from "../../Components/UI/Navbar/Navbar";
 import classes from "./Profile.module.css";
 import Button from "../../Components/Button/Button";
-import Input from "../../Components/Input/Input.jsx";
+import Input from "../../Components/Input/Input.tsx";
 import ModalWindow from "../../Components/UI/ModalWindow/ModalWindow";
 import PhotoInput from "../../Components/PhotoInput/PhotoInput";
 import UserInfo from "../../Components/UserInfo/UserInfo";
