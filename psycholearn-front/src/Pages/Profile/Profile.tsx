@@ -1,26 +1,68 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { HttpGet } from "../../requests";
+import { HttpGet, HttpGetFile } from "@/requests.ts";
 import Navbar from "../../Components/UI/Navbar/Navbar";
 import classes from "./Profile.module.css";
 import Button from "../../Components/Button/Button";
 import Input from "../../Components/Input/Input.tsx";
 import ModalWindow from "../../Components/UI/ModalWindow/ModalWindow";
-import PhotoInput from "../../Components/PhotoInput/PhotoInput";
-import UserInfo from "../../Components/UserInfo/UserInfo";
 import { PageOwnerContext } from "../../Contexts/PageOwnerContext";
+import UserInfo from "@/Components/UserInfo/UserInfo.tsx";
+import PhotoInput from "@/Components/PhotoInput/PhotoInput.tsx";
 
 const Profile = () => {
-  const { isPageOwner, setIsPageOwner } = useContext(PageOwnerContext);
+  const {
+    isPageOwner,
+    setIsPageOwner,
+    setName,
+    setSurname,
+    setEmail,
+    setRole,
+    setAbout,
+    setPhoto,
+  } = useContext(PageOwnerContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [isChanging, setIsChanging] = useState(false);
 
+  useEffect(() => {
+    HttpGet("/users/" + id, {
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.err === undefined) {
+          if (res.access_token !== undefined)
+            localStorage.setItem("access_token", res.access_token);
+          setName(res.username);
+          setSurname(res.surname);
+          setEmail(res.email);
+          setRole(res.userrole);
+          setAbout(res.about);
+          setIsPageOwner(res.is_page_owner);
+        } else {
+          localStorage.clear();
+          navigate("/start");
+        }
+      })
+      .then((r) =>
+        HttpGetFile(`/users/${id}/photo`, {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        }).then((res) => {
+          res.blob().then((r) => {
+            console.log(isPageOwner);
+            console.log(r);
+            setPhoto(URL.createObjectURL(r));
+          });
+        }),
+      );
+  }, []);
+
   return (
     <div className={classes.wrap}>
       <ModalWindow active={isChanging} setActive={setIsChanging}>
-        <Input placeholder="Name"></Input>
-        <Input placeholder="Surname"></Input>
+        <Input value={""} onChange={() => {}} placeholder="Name"></Input>
+        <Input value={""} onChange={() => {}} placeholder="Surname"></Input>
       </ModalWindow>
       <div className={classes.profile}>
         <div className={classes.navbar}>

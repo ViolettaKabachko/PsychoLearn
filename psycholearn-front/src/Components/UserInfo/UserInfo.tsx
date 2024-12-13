@@ -1,50 +1,37 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { FC, useContext } from "react";
 import classes from "./UserInfo.module.css";
-import { useFetch } from "../../Hooks/useFetch";
-import { HttpGet } from "../../requests";
-import { useNavigate, useParams } from "react-router-dom";
 import { PageOwnerContext } from "../../Contexts/PageOwnerContext";
 
-const UserInfo = ({ ...props }) => {
-  const { id } = useParams();
-  const { setIsPageOwner } = useContext(PageOwnerContext);
-  const navigate = useNavigate();
-  const [uid, setUid] = useState("");
-  const [name, setName] = useState("");
-  const [surname, setSurame] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState(1);
+const UserInfo: FC = () => {
+  const { name, setName } = useContext(PageOwnerContext);
+  const { surname, setSurname } = useContext(PageOwnerContext);
+  const { email, setEmail } = useContext(PageOwnerContext);
+  const { role, setRole } = useContext(PageOwnerContext);
+  const { about, setAbout } = useContext(PageOwnerContext);
   const roles = {
     1: "Reader",
     2: "Psychologist",
     3: "Admin",
   };
-  const [about, setAbout] = useState("");
-  const [fetchUser, loadingUser, errorUser] = useFetch(async () => {
-    HttpGet("/users/" + id, {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    }).then((res) => {
-      console.log(res);
-      if (res.err === undefined) {
-        setName(res.username);
-        setSurame(res.surname);
-        setEmail(res.email);
-        setRole(res.userrole);
-        setUid(res.uid);
-        setAbout(res.about);
-        setIsPageOwner(res.is_page_owner);
-        if (res.access_token !== undefined)
-          localStorage.setItem("access_token", res.access_token);
-      } else {
-        localStorage.clear();
-        navigate("/start");
-      }
-    });
-  });
-
-  useEffect(() => {
-    fetchUser().then((r) => console.log(r));
-  }, []);
+  // const [fetchUser, loadingUser, errorUser] = useFetch(() => {
+  //   HttpGet("/users/" + id, {
+  //     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  //   }).then((res) => {
+  //     console.log(res);
+  //     if (res.err === undefined) {
+  //       setName(res.username);
+  //       setSurname(res.surname);
+  //       setEmail(res.email);
+  //       setRole(res.userrole);
+  //       setAbout(res.about);
+  //       setIsPageOwner(res.is_page_owner);
+  //     }
+  //   });
+  // });
+  //
+  // useEffect(() => {
+  //   fetchUser().then((r) => console.log(r));
+  // }, []);
 
   return (
     <div className={classes.userInfo}>

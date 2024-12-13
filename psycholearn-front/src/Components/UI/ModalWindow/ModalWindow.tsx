@@ -1,14 +1,23 @@
-import React from 'react'
-import classes from './ModalWindow.module.css'
+import React, { FC, PropsWithChildren } from "react";
+import classes from "./ModalWindow.module.css";
 
-const ModalWindow = ({children, active}) => {
-  return (
-    <div className={active ? classes.modal + ` ` + classes.active : classes.modal}>
-        <div className={classes.modal_content}>
-            {children}
-        </div>
-    </div>
-  )
+interface ModalWindowProps {
+  setActive: (any) => void;
+  active: boolean;
 }
 
-export default ModalWindow
+const ModalWindow: FC<PropsWithChildren<ModalWindowProps>> = ({
+  children,
+  active,
+  setActive,
+}) => {
+  return (
+    <div
+      className={active ? classes.modal + ` ` + classes.active : classes.modal}
+    >
+      <div className={classes.modal_content}>{children}</div>
+    </div>
+  );
+};
+
+export default ModalWindow;

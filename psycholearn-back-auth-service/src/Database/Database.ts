@@ -111,6 +111,7 @@ export class DataBaseClient {
         let res = undefined
         try {
             res = (await this.client.query("SELECT * FROM refreshsession WHERE userid = $1", [uid])).rows[0]
+            console.log(res)
         }
         catch (e) {
             console.log("Error occured: " + e)

@@ -11,6 +11,7 @@ dotenv.config()
 class authController {
     // описать весь процесс проверки и выдачи
     static async verifyJWT(accessToken: string, refreshToken: string, uid: number) {
+        let user = jwt.decode(accessToken) as IJwtPayload
         try {
             jwt.verify(accessToken, process.env.SECRET_KEY as string) as IJwtPayload
             console.log("Access token is alive")
@@ -24,6 +25,7 @@ class authController {
 
                 let user = jwt.decode(accessToken) as IJwtPayload
                 let refreshSession = await DbClient.getRefreshSession(uid)
+                //console.log(`${refreshSession.refreshtoken}\n\n${refreshToken}`)
                 if (refreshSession && refreshSession.refreshtoken === refreshToken) {
                     try {
                         // если не протух рефреш
@@ -38,7 +40,7 @@ class authController {
                             createdAt: date,
                             expiresAt: date + parseInt(process.env.REFRESH_TOKEN_LIFE as string)
                         })
-                        console.log("new refresh: " + newRefresh)
+                        //console.log("new refresh: " + newRefresh)
                         console.log("New pair of tokens created")
                         return {
                             accessToken: newAccess,
@@ -60,10 +62,12 @@ class authController {
             }
             else if (error.name === "JsonWebTokenError") {
                 console.log(`Error: ${e}`)
+                await DbClient.deleteRefreshSession(user.uid)
                 throw e
             }
             else {
                 console.log("Other error: " + e)
+                await DbClient.deleteRefreshSession(user.uid)
                 throw e;
             }
         }
@@ -91,10 +95,14 @@ class authController {
                         createdAt: date,
                         expiresAt: date + parseInt(process.env.REFRESH_TOKEN_LIFE as string)
                     })
+                    console.log(`Refresh token when login: ${refresh_token}`)
                     res.status(200)
                     .cookie("refresh_token",
                         refresh_token,
-                    {maxAge: date + parseInt(process.env.REFRESH_TOKEN_LIFE as string)})
+                        {
+                            maxAge: date + parseInt(process.env.REFRESH_TOKEN_LIFE as string),
+                        }
+                    )
                     .json({ 
                         "msg": "Logged in successfully",
                         "id": user.uid,
