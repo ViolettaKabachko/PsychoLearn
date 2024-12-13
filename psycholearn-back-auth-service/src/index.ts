@@ -30,6 +30,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use("/users/:id", async (req: Request, res: Response, next: NextFunction) => {
     let accessToken = (req.headers.authorization as string).slice(7)
     let refreshToken = req.cookies["refresh_token"]
+    console.log(`Cookie: ${req.cookies["refresh_token"]}`)
     try {
         let verifyResult = await authController.verifyJWT(accessToken, refreshToken, parseInt(req.params.id)) as Tokens
         let date = Math.ceil(Date.now() / 1000)
@@ -38,12 +39,13 @@ app.use("/users/:id", async (req: Request, res: Response, next: NextFunction) =>
                 "_msg": "Tokens updated successfully",
                 "access_token": verifyResult.accessToken
             }
+            console.log("New pair of tokens in middleware")
             res.status(200).cookie("refresh_token", verifyResult.refreshToken, {maxAge: date + (7 * 24 * 3600) * 1000})
         }
         next()
     }
     catch (e) {
-        console.log("Error was occurred when veridfing the tokens: " + e)
+        console.log("Error was occurred when verifying the tokens: " + e)
         res.status(401).clearCookie("refresh_token").json({"err": "Tokens error"})
     }
 })

@@ -33,7 +33,6 @@ class UserController {
 
     async getUserById (req: Request, res: Response) {
         try {
-            console.log(req.cookies)
             const decoded = jwt.decode((req.headers.authorization as string).slice(7)) as IJwtPayload
             let user = await DbClient.getUserById(parseInt(req.params.id))
             console.log(decoded.uid === parseInt(req.params.id))
@@ -62,7 +61,7 @@ class UserController {
 
     async updateUsersPhoto(req: Request, res: Response) {
         try {
-            await authController.verifyJWT((req.headers.authorization as string).slice(7), req.cookies["refresh_token"], parseInt(req.params.id))
+            // await authController.verifyJWT((req.headers.authorization as string).slice(7), req.cookies["refresh_token"], parseInt(req.params.id))
             await DbClient.updateUsersPhoto(parseInt(req.params.id), `/pcts/${req.file?.originalname}`)
             res.status(200).json({"msg": "Photo updated", ...res.locals.resBody})
         }
