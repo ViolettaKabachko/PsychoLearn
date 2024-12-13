@@ -1,10 +1,8 @@
 const path = require("path");
-
 module.exports = {
-  resolve: {
+  webpack: {
     alias: {
       "@": path.resolve(__dirname, "src"),
     },
-    extensions: [".ts", ".tsx", ".js", ".jsx"],
   },
 };

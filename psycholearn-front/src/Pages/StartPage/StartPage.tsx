@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../Components/UI/Navbar/Navbar";
 import classes from "./StarPage.module.css";
@@ -38,7 +38,7 @@ const StartPage = () => {
         <div className={classes.navbar}>
           <Navbar
             onLogoFunc={() =>
-              localStorage.getItem("access_token)") === undefined
+              localStorage.getItem("access_token") === null
                 ? setActiveLogIn(true)
                 : navigate(`../users/${localStorage.getItem("id")}`, {
                     relative: "path",

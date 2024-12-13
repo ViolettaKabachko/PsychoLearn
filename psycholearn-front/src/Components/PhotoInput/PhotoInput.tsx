@@ -1,16 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 import classes from "./PhotoInput.module.css";
-import phot from "../../Images/default.svg";
 import { useFetch } from "../../Hooks/useFetch";
-import { HttpGetFile, HttpPostFile } from "../../requests";
+import { HttpPostFile } from "@/requests.ts";
 import { useParams } from "react-router-dom";
 import { PageOwnerContext } from "../../Contexts/PageOwnerContext";
 
-const PhotoInput = ({ ...props }) => {
+const PhotoInput: FC = () => {
   const { id } = useParams();
   const { isPageOwner } = useContext(PageOwnerContext);
-  const [photo, setPhoto] = useState(phot);
-  const [newPhoto, setNewPhoto] = useState();
+  const { photo, setPhoto } = useContext(PageOwnerContext);
+  const [newPhoto, setNewPhoto] = useState("");
   const [photoChanged, setPhotoChanged] = useState(false);
   const [updatePhoto, loading, error] = useFetch(async () => {
     let data = new FormData();
@@ -21,7 +20,7 @@ const PhotoInput = ({ ...props }) => {
           new File([blobFile], `user_${id}.jpeg`, { type: "image/jpeg" }),
       );
     data.append(`users_photo`, file, `user_${id}.jpeg`);
-    let res = await HttpPostFile(`/users/${id}/update_photo`, data, {
+    await HttpPostFile(`/users/${id}/update_photo`, data, {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     });
     setPhoto(newPhoto);
@@ -29,23 +28,26 @@ const PhotoInput = ({ ...props }) => {
     setNewPhoto(undefined);
   });
 
-  useEffect(() => {
-    HttpGetFile(`/users/${id}/photo`, {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    }).then((res) => {
-      res.blob().then((r) => {
-        console.log(isPageOwner);
-        setPhoto(URL.createObjectURL(r));
-      });
-    });
-  }, []);
+  // useEffect(() => {
+  //   HttpGetFile(`/users/${id}/photo`, {
+  //     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  //   }).then((res) => {
+  //     res.blob().then((r) => {
+  //       console.log(isPageOwner);
+  //       console.log(r);
+  //       setPhoto(URL.createObjectURL(r));
+  //     });
+  //   });
+  // }, []);
 
   return (
     <>
       <div
-        style={{
-          "--photo-url": `url(${newPhoto === undefined ? photo : newPhoto})`,
-        }}
+        style={
+          {
+            "--photo-url": `url(${newPhoto === "" ? photo : newPhoto})`,
+          } as React.CSSProperties
+        }
         className={
           isPageOwner
             ? classes.profilePhoto + " " + classes.owned
@@ -53,6 +55,7 @@ const PhotoInput = ({ ...props }) => {
         }
       >
         <input
+          onClick={() => console.log(photo)}
           accept="image/jpeg"
           onChange={(e) => {
             if (e.target.files[0]) {
@@ -85,7 +88,7 @@ const PhotoInput = ({ ...props }) => {
           <div
             onClick={() => {
               setPhotoChanged(false);
-              setNewPhoto(undefined);
+              setNewPhoto("");
             }}
             style={{ color: "red" }}
           >

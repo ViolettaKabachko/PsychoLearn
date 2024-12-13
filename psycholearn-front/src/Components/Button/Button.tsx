@@ -1,24 +1,37 @@
-import React from 'react'
-import classes from './Button.module.css'
+import React, { FC, PropsWithChildren } from "react";
+import classes from "./Button.module.css";
 
-const Button = ({children, ...props}) => {
+interface ButtonProps {
+  color: {
+    r: number;
+    g: number;
+    b: number;
+  };
+  disabled?: boolean;
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+}
+
+const Button: FC<PropsWithChildren<ButtonProps>> = ({
+  color,
+  disabled,
+  children,
+  onClick,
+}) => {
   let colorObj = {};
 
-  ['r', 'g', 'b'].forEach(x => {
-    colorObj[`--${x}-color`] = props.color[x]
+  ["r", "g", "b"].forEach((x) => {
+    colorObj[`--${x}-color`] = color[x];
   });
-  if (!props.disabled) {
-    return (
-      <button disabled
-      style={colorObj} 
-      className={classes.button} {...props}>{children}</button>
-)
-  }
   return (
-        <button 
-        style={colorObj} 
-        className={classes.button} {...props}>{children}</button>
-  )
-}
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      style={colorObj}
+      className={classes.button}
+    >
+      {children}
+    </button>
+  );
+};
 
 export default Button;
