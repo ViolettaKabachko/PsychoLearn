@@ -34,16 +34,6 @@ const LogInForm: FC<LogInFormProps> = ({ ...props }) => {
 
   return (
     <>
-      <div
-        onClick={() => {
-          props.setActiveLogIn(false);
-          setLogInPassword("");
-          setLogInEmail("");
-          props.setResponse("");
-        }}
-        className={classes.backCross}
-      ></div>
-
       <div className={classes.signUpTitle}>Log in</div>
       <Input
         placeholder="Email"
