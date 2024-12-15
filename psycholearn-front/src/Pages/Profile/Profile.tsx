@@ -24,6 +24,7 @@ const Profile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isChanging, setIsChanging] = useState(false);
+  const [answer, setAnswer] = useState("");
 
   useEffect(() => {
     HttpGet("/users/" + id, {
@@ -60,7 +61,11 @@ const Profile = () => {
 
   return (
     <div className={classes.wrap}>
-      <ModalWindow active={isChanging} setActive={setIsChanging}>
+      <ModalWindow
+        setAnswer={setAnswer}
+        active={isChanging}
+        setActive={setIsChanging}
+      >
         <Input value={""} onChange={() => {}} placeholder="Name"></Input>
         <Input value={""} onChange={() => {}} placeholder="Surname"></Input>
       </ModalWindow>

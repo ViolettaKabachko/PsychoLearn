@@ -13,6 +13,7 @@ const PhotoInput: FC = () => {
   const [photoChanged, setPhotoChanged] = useState(false);
   const [updatePhoto, loading, error] = useFetch(async () => {
     let data = new FormData();
+    console.log(newPhoto);
     let file = await fetch(newPhoto)
       .then((r) => r.blob())
       .then(
@@ -25,7 +26,7 @@ const PhotoInput: FC = () => {
     });
     setPhoto(newPhoto);
     setPhotoChanged(false);
-    setNewPhoto(undefined);
+    setNewPhoto("");
   });
 
   // useEffect(() => {
@@ -62,8 +63,9 @@ const PhotoInput: FC = () => {
               console.log(e.target.files[0]);
               setNewPhoto(URL.createObjectURL(e.target.files[0]));
               setPhotoChanged(true);
+              console.log(newPhoto);
             } else console.log("No file chosen");
-            e.target.value = "";
+            //e.target.value = "";
           }}
           className={
             isPageOwner

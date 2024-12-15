@@ -16,7 +16,7 @@ const StartPage = () => {
 
   return (
     <div className={classes.firstBlock}>
-      <ModalWindow active={active} setActive={setActive}>
+      <ModalWindow active={active} setActive={setActive} setAnswer={setAnswer}>
         <SignUpForm
           setActive={setActive}
           answer={answer}
@@ -26,7 +26,11 @@ const StartPage = () => {
         />
       </ModalWindow>
 
-      <ModalWindow active={activeLogIn} setActive={setActiveLogIn}>
+      <ModalWindow
+        setAnswer={setAnswer}
+        active={activeLogIn}
+        setActive={setActiveLogIn}
+      >
         <LogInForm
           response={response}
           setActiveLogIn={setActiveLogIn}

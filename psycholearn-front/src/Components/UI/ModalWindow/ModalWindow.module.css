@@ -23,6 +23,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
     flex-direction: column;
     border-radius: 12px;
     background-color: white;
@@ -30,4 +31,27 @@
 
 .modal_content > input {
     margin: 5%;
+}
+
+
+.backCross {
+    background-color: white;
+    top: 0;
+    right: 10px;
+    position: absolute;
+    transition: all ease-in-out 0.2s;
+    border-radius: 5px;
+}
+
+.backCross::after {
+    font-size: 26px;
+    padding: 3px 10px;
+    display: inline-block;
+    content: "\00d7";
+}
+
+.backCross:hover {
+    background-color: red;
+    color: white;
+    cursor: pointer;
 }
