@@ -4,11 +4,11 @@ import { HttpGet, HttpGetFile } from "@/requests.ts";
 import Navbar from "../../Components/UI/Navbar/Navbar";
 import classes from "./Profile.module.css";
 import Button from "../../Components/Button/Button";
-import Input from "../../Components/Input/Input.tsx";
 import ModalWindow from "../../Components/UI/ModalWindow/ModalWindow";
 import { PageOwnerContext } from "../../Contexts/PageOwnerContext";
 import UserInfo from "@/Components/UserInfo/UserInfo.tsx";
 import PhotoInput from "@/Components/PhotoInput/PhotoInput.tsx";
+import SettingsFrom from "@/Components/Forms/SettingsForm/SettingsFrom.tsx";
 
 const Profile = () => {
   const {
@@ -66,8 +66,7 @@ const Profile = () => {
         active={isChanging}
         setActive={setIsChanging}
       >
-        <Input value={""} onChange={() => {}} placeholder="Name"></Input>
-        <Input value={""} onChange={() => {}} placeholder="Surname"></Input>
+        <SettingsFrom />
       </ModalWindow>
       <div className={classes.profile}>
         <div className={classes.navbar}>

@@ -57,13 +57,6 @@ const SignUpForm: FC<SignUpFormProps> = ({ ...props }) => {
 
   return (
     <>
-      {/*<div*/}
-      {/*  onClick={() => {*/}
-      {/*    props.setActive(false);*/}
-      {/*    props.setAnswer("");*/}
-      {/*  }}*/}
-      {/*  className={classes.backCross}*/}
-      {/*></div>*/}
       <Input
         placeholder="Name"
         value={name}

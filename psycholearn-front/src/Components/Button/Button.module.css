@@ -15,38 +15,86 @@
     background-color: rgb(calc(var(--r-color) - 23), calc(var(--g-color) - 44), calc(var(--b-color) - 39));
 }
 
-@media(width > 3000px) {
+@media screen and (max-width: 8000px) {
+    .button {
+        font-size: 134px;
+        border-radius: 21px 21px 3px 3px;
+    }
+}
+
+@media screen and (max-width: 6000px) {
     .button {
         font-size: 104px;
-        border-radius: 16px 10px 16px 10px ;
+        border-radius: 21px 21px 3px 3px;
     }
 }
 
-@media(width > 2000px) and (width < 3000px) {
+@media screen and (max-width: 4000px) {
     .button {
-        font-size: 52px;
-        border-radius: 10px 5px 10px 5px ;
+        font-size: 70px;
+        border-radius: 21px 21px 3px 3px;
     }
 }
 
-@media(width > 1050px) and (width < 2000px) {
+@media screen and (max-width: 2900px) {
     .button {
-        font-size: 26px;
-        border-radius: 10px 5px 10px 5px ;
+        font-size: 51px;
+        border-radius: 21px 21px 3px 3px;
     }
 }
 
-@media(max-width: 1050px) {
+@media screen and (max-width: 2200px) {
     .button {
-        font-size: 13px;
-        padding: 5px 1px 5px 1px;
+        font-size: 39px;
+        border-radius: 12px 12px 3px 3px;
     }
 }
 
-@media(max-width: 360px) {
+@media screen and (max-width: 1920px) {
+    .button {
+        font-size: 34px;
+        border-radius: 12px 12px 3px 3px;
+    }
+}
+
+@media screen and (max-width: 1560px) {
+    .button {
+        font-size: 27px;
+        border-radius: 12px 12px 3px 3px;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .button {
+        font-size: 20px;
+        border-radius: 12px 12px 3px 3px;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .button {
+        font-size: 17px;
+        border-radius: 7px 7px 3px 3px;
+    }
+}
+
+@media screen and (max-width: 830px) {
+    .button {
+        font-size: 12px;
+        border-radius: 7px 7px 3px 3px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .button {
+        font-size: 10px;
+        border-radius: 7px 7px 3px 3px;
+    }
+}
+
+@media screen and (max-width: 480px) {
     .button {
         font-size: 7px;
-        border-radius: 2px 2px 0 0 ;
-        padding: 1px;
+        border-radius: 7px 7px 3px 3px;
     }
 }

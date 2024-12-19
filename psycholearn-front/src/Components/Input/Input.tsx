@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from "react";
+import React, { FC } from "react";
 import classes from "./Input.module.css";
 
 interface InputProps {
@@ -8,12 +8,8 @@ interface InputProps {
   onChange: (any) => void;
 }
 
-const Input: FC<PropsWithChildren<InputProps>> = ({ children, ...props }) => {
-  return (
-    <input className={classes.input} {...props}>
-      {children}
-    </input>
-  );
+const Input: FC<InputProps> = ({ ...props }) => {
+  return <input className={classes.input} {...props}></input>;
 };
 
 export default Input;
