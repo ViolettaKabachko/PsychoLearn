@@ -7,6 +7,12 @@
     width: 100%;
 }
 
+@media screen and (max-width: 8000px) {
+    .navbar {
+        font-size: 100px;
+    }
+}
+
 @media screen and (max-width: 6000px) {
     .navbar {
         font-size: 80px;
@@ -19,31 +25,38 @@
     }
 }
 
-@media screen and (max-width: 1800px) {
+@media screen and (max-width: 2200px) {
     .navbar {
         font-size: 35px;
+    }
+}
+
+@media screen and (max-width: 1800px) {
+    .navbar {
+        font-size: 28px;
     }
 }
 
 
 @media screen and (max-width: 1500px) {
     .navbar {
-        font-size: 24px;
+        font-size: 22px;
     }
 }
 
 @media screen and (max-width: 1000px) {
     .navbar {
-        font-size: 18px;
+        font-size: 15px;
     }
 }
 
 @media screen and (max-width: 700px) {
     .navbar {
         font-size: 12px;
+        column-gap: 16px;
     }
 
-    .logo, .log_in_logo {
+    .logo {
         display: none;
     }
 }

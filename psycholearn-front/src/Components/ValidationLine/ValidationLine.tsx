@@ -9,7 +9,7 @@ interface ValidationLineProps {
 const ValidationLine: FC<PropsWithChildren<ValidationLineProps>> = ({
   children,
   func,
-  text,
+  text = "",
 }) => {
   let func_res = func(text);
   return (
