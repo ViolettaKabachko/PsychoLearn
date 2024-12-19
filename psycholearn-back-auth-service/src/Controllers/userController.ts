@@ -1,10 +1,10 @@
 import {Response, Request} from 'express';
 import { DbClient } from '../Database/DataBaseRunner';
 import { User, userGuard } from '../Interfaces/User';
-import authController from './authController';
 import * as jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
 import { IJwtPayload } from '../Interfaces/JwtPayload';
+import { IUpdateData } from '../Interfaces/UpdateData';
 
 dotenv.config();
 
@@ -46,7 +46,6 @@ class UserController {
 // добавить тут в заголовки res.locals.resBody
     async getUsersPhoto(req: Request, res: Response) {
         try {
-            // await authController.verifyJWT((req.headers.authorization as string).slice(7), req.cookies["refresh_token"], parseInt(req.params.id))
             let photo = await DbClient.getUsersPhoto(parseInt(req.params.id))
             if (photo.photo !== "")
                 res.sendFile(photo.photo, {root: "../"})
@@ -61,13 +60,32 @@ class UserController {
 
     async updateUsersPhoto(req: Request, res: Response) {
         try {
-            // await authController.verifyJWT((req.headers.authorization as string).slice(7), req.cookies["refresh_token"], parseInt(req.params.id))
             await DbClient.updateUsersPhoto(parseInt(req.params.id), `/pcts/${req.file?.originalname}`)
             res.status(200).json({"msg": "Photo updated", ...res.locals.resBody})
         }
         catch (e) {
             console.log(`Error was occured: ${e}`)
             res.status(401)
+        }
+    }
+
+    async updateUser(req: Request, res: Response) {
+        let body = req.body as IUpdateData
+        if ((jwt.decode(req.cookies["refresh_token"]) as IJwtPayload)["uid"] === parseInt(req.params.id)) {
+            try {
+                if (await DbClient.updateUser(body.name, body.surname, body.about, parseInt(req.params.id)))
+                    res.status(200).json({"msg": "Data updated successfully", ...res.locals.resBody})
+                else
+                    throw new Error();
+            }
+            catch (e) {
+                console.log(`Error was occured: ${e}`)
+                res.status(500).json({"err": "Error was occurred while updating"})
+            }
+        }
+        else {
+            console.log("Trying to update not own user");
+            res.status(401).json({"err": "Trying to update not own user"});
         }
     }
 

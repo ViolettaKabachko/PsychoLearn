@@ -4,9 +4,11 @@ import { authRouter } from "./Routers/authRouter";
 import { secureRouter } from "./Routers/secureRouter";
 import dotenv from 'dotenv'
 import cors from 'cors'
+import * as jwt from 'jsonwebtoken';
 import cookieParser from "cookie-parser";
 import authController from "./Controllers/authController";
 import { Tokens } from "./Interfaces/Tokens";
+import { IJwtPayload } from "./Interfaces/JwtPayload";
 
 
 dotenv.config();
@@ -30,9 +32,11 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use("/users/:id", async (req: Request, res: Response, next: NextFunction) => {
     let accessToken = (req.headers.authorization as string).slice(7)
     let refreshToken = req.cookies["refresh_token"]
+    let id: number = (jwt.decode(accessToken) as IJwtPayload)['uid']
+    console.log((jwt.decode(accessToken) as IJwtPayload))
     console.log(`Cookie: ${req.cookies["refresh_token"]}`)
     try {
-        let verifyResult = await authController.verifyJWT(accessToken, refreshToken, parseInt(req.params.id)) as Tokens
+        let verifyResult = await authController.verifyJWT(accessToken, refreshToken, id) as Tokens
         let date = Math.ceil(Date.now() / 1000)
         if (verifyResult.refreshToken) {
             res.locals.resBody = { 
