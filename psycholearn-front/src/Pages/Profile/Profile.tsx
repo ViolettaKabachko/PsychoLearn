@@ -9,6 +9,7 @@ import { PageOwnerContext } from "../../Contexts/PageOwnerContext";
 import UserInfo from "@/Components/UserInfo/UserInfo.tsx";
 import PhotoInput from "@/Components/PhotoInput/PhotoInput.tsx";
 import SettingsFrom from "@/Components/Forms/SettingsForm/SettingsFrom.tsx";
+import { useFetch } from "@/Hooks/useFetch.tsx";
 
 const Profile = () => {
   const {
@@ -25,38 +26,71 @@ const Profile = () => {
   const navigate = useNavigate();
   const [isChanging, setIsChanging] = useState(false);
   const [answer, setAnswer] = useState("");
+  // const [getInfo, loading, error] = useFetch(() => {
+  //   HttpGet("/users/" + id, {
+  //     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  //   })
+  //     .then((res) => {
+  //       console.log(res);
+  //       if (res.err === undefined) {
+  //         if (res.access_token !== undefined)
+  //           localStorage.setItem("access_token", res.access_token);
+  //         setName(res.username);
+  //         setSurname(res.surname);
+  //         setEmail(res.email);
+  //         setRole(res.userrole);
+  //         setAbout(res.about);
+  //         setIsPageOwner(res.is_page_owner);
+  //       } else {
+  //         localStorage.clear();
+  //         navigate("/start");
+  //       }
+  //     })
+  //     .then((r) =>
+  //       HttpGetFile(`/users/${id}/photo`, {
+  //         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  //       }).then((res) => {
+  //         res.blob().then((r) => {
+  //           console.log(isPageOwner);
+  //           console.log(r);
+  //           setPhoto(URL.createObjectURL(r));
+  //         });
+  //       }),
+  //     );
+  // });
+  const [getInfo, loading, error] = useFetch(async () => {
+    try {
+      const res = await HttpGet(`/users/${id}`, {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      });
+
+      if (res.err === undefined) {
+        if (res.access_token !== undefined)
+          localStorage.setItem("access_token", res.access_token);
+        setName(res.username);
+        setSurname(res.surname);
+        setEmail(res.email);
+        setRole(res.userrole);
+        setAbout(res.about);
+        setIsPageOwner(res.is_page_owner);
+      } else {
+        localStorage.clear();
+        navigate("/start");
+      }
+
+      const photoResponse = await HttpGetFile(`/users/${id}/photo`, {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      });
+
+      const photoBlob = await photoResponse.blob();
+      setPhoto(URL.createObjectURL(photoBlob));
+    } catch (err) {
+      throw new Error("Failed to fetch user info: " + err.message);
+    }
+  });
 
   useEffect(() => {
-    HttpGet("/users/" + id, {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    })
-      .then((res) => {
-        console.log(res);
-        if (res.err === undefined) {
-          if (res.access_token !== undefined)
-            localStorage.setItem("access_token", res.access_token);
-          setName(res.username);
-          setSurname(res.surname);
-          setEmail(res.email);
-          setRole(res.userrole);
-          setAbout(res.about);
-          setIsPageOwner(res.is_page_owner);
-        } else {
-          localStorage.clear();
-          navigate("/start");
-        }
-      })
-      .then((r) =>
-        HttpGetFile(`/users/${id}/photo`, {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        }).then((res) => {
-          res.blob().then((r) => {
-            console.log(isPageOwner);
-            console.log(r);
-            setPhoto(URL.createObjectURL(r));
-          });
-        }),
-      );
+    getInfo();
   }, []);
 
   return (
@@ -79,9 +113,11 @@ const Profile = () => {
         </div>
 
         <div className={classes.mainBlock}>
-          <UserInfo />
-          <PhotoInput />
-          {isPageOwner && (
+          {error !== undefined && <div>{error}</div>}
+          {loading && <div className={classes.loader}></div>}
+          {!loading && !error && <UserInfo />}
+          {!loading && !error && <PhotoInput />}
+          {!loading && !error && isPageOwner && (
             <div className={classes.editButton}>
               <Button
                 onClick={() => setIsChanging(true)}

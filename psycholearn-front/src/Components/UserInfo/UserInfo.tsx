@@ -3,35 +3,16 @@ import classes from "./UserInfo.module.css";
 import { PageOwnerContext } from "../../Contexts/PageOwnerContext";
 
 const UserInfo: FC = () => {
-  const { name, setName } = useContext(PageOwnerContext);
-  const { surname, setSurname } = useContext(PageOwnerContext);
-  const { email, setEmail } = useContext(PageOwnerContext);
-  const { role, setRole } = useContext(PageOwnerContext);
-  const { about, setAbout } = useContext(PageOwnerContext);
+  const { name } = useContext(PageOwnerContext);
+  const { surname } = useContext(PageOwnerContext);
+  const { email } = useContext(PageOwnerContext);
+  const { role } = useContext(PageOwnerContext);
+  const { about } = useContext(PageOwnerContext);
   const roles = {
     1: "Reader",
     2: "Psychologist",
     3: "Admin",
   };
-  // const [fetchUser, loadingUser, errorUser] = useFetch(() => {
-  //   HttpGet("/users/" + id, {
-  //     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-  //   }).then((res) => {
-  //     console.log(res);
-  //     if (res.err === undefined) {
-  //       setName(res.username);
-  //       setSurname(res.surname);
-  //       setEmail(res.email);
-  //       setRole(res.userrole);
-  //       setAbout(res.about);
-  //       setIsPageOwner(res.is_page_owner);
-  //     }
-  //   });
-  // });
-  //
-  // useEffect(() => {
-  //   fetchUser().then((r) => console.log(r));
-  // }, []);
 
   return (
     <div className={classes.userInfo}>

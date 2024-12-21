@@ -1,17 +1,18 @@
 import { useState } from "react";
 
 export const useFetch = (
-  callback: () => any,
-): [() => Promise<any>, boolean, string] => {
+  callback: () => any | Promise<any>,
+): [() => Promise<void>, boolean, string] => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const fetch = async () => {
+    setLoading(true);
+    setError("");
     try {
-      setLoading(true);
       await callback();
     } catch (e) {
-      setError(e.message);
+      setError(e.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
