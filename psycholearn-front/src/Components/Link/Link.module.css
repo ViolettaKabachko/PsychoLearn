@@ -1,0 +1,12 @@
+.anchor {
+    text-decoration: none;
+    color: #6a6a6e;
+    transition: all 0.2s ease-in-out;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.anchor:hover {
+    color: #353434;
+    cursor: pointer;
+}
