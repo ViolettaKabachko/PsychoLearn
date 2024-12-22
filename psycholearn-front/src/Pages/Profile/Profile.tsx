@@ -10,6 +10,7 @@ import UserInfo from "@/Components/UserInfo/UserInfo.tsx";
 import PhotoInput from "@/Components/PhotoInput/PhotoInput.tsx";
 import SettingsFrom from "@/Components/Forms/SettingsForm/SettingsFrom.tsx";
 import { useFetch } from "@/Hooks/useFetch.tsx";
+import Link from "@/Components/Link/Link.tsx";
 
 const Profile = () => {
   const {
@@ -22,42 +23,16 @@ const Profile = () => {
     setAbout,
     setPhoto,
   } = useContext(PageOwnerContext);
+
+  const logoClick = () => {
+    navigate("/users/" + localStorage.getItem("id"));
+    navigate(0);
+  };
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [isChanging, setIsChanging] = useState(false);
   const [answer, setAnswer] = useState("");
-  // const [getInfo, loading, error] = useFetch(() => {
-  //   HttpGet("/users/" + id, {
-  //     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-  //   })
-  //     .then((res) => {
-  //       console.log(res);
-  //       if (res.err === undefined) {
-  //         if (res.access_token !== undefined)
-  //           localStorage.setItem("access_token", res.access_token);
-  //         setName(res.username);
-  //         setSurname(res.surname);
-  //         setEmail(res.email);
-  //         setRole(res.userrole);
-  //         setAbout(res.about);
-  //         setIsPageOwner(res.is_page_owner);
-  //       } else {
-  //         localStorage.clear();
-  //         navigate("/start");
-  //       }
-  //     })
-  //     .then((r) =>
-  //       HttpGetFile(`/users/${id}/photo`, {
-  //         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-  //       }).then((res) => {
-  //         res.blob().then((r) => {
-  //           console.log(isPageOwner);
-  //           console.log(r);
-  //           setPhoto(URL.createObjectURL(r));
-  //         });
-  //       }),
-  //     );
-  // });
   const [getInfo, loading, error] = useFetch(async () => {
     try {
       const res = await HttpGet(`/users/${id}`, {
@@ -104,12 +79,7 @@ const Profile = () => {
       </ModalWindow>
       <div className={classes.profile}>
         <div className={classes.navbar}>
-          <Navbar
-            onLogoFunc={() => {
-              navigate("/users/" + localStorage.getItem("id"));
-              navigate(0);
-            }}
-          />
+          <Navbar onLogoFunc={logoClick} />
         </div>
 
         <div className={classes.mainBlock}>
@@ -133,22 +103,44 @@ const Profile = () => {
 
       <div className={classes.statsBlock}>
         {isPageOwner && (
-          <div
-            onClick={() =>
-              HttpGet(`/users/${id}/logout`, {
-                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-              }).then((r) => {
-                if (r["err"] === undefined) {
-                  localStorage.clear();
-                  document.cookie =
-                    "refresh_token" +
-                    "=1;expires=Thu, 01 Jan 1970 00:00:00 GMT';";
-                  navigate("/start");
+          <div className={classes.manageBlock}>
+            <div className={classes.links}>
+              <div>
+                <Link>Wanna be writer or psychologist?</Link>
+              </div>
+              <div>
+                <Link>Change password</Link>
+              </div>
+              <div>
+                <Link>Change email</Link>
+              </div>
+            </div>
+
+            <div className={classes.logout}>
+              <Button
+                color={{
+                  r: 246,
+                  g: 130,
+                  b: 130,
+                }}
+                onClick={() =>
+                  HttpGet(`/users/${id}/logout`, {
+                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                  }).then((r) => {
+                    if (r["err"] === undefined) {
+                      localStorage.clear();
+                      document.cookie =
+                        "refresh_token" +
+                        "=1;expires=Thu, 01 Jan 1970 00:00:00 GMT';";
+                      navigate("/start");
+                    }
+                  })
                 }
-              })
-            }
-            className={classes.logout}
-          ></div>
+              >
+                Logout
+              </Button>
+            </div>
+          </div>
         )}
       </div>
     </div>
