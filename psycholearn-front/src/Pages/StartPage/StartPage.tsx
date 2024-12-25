@@ -13,17 +13,11 @@ const StartPage = () => {
   const [activeLogIn, setActiveLogIn] = useState(false);
   const [response, setResponse] = useState();
   const [answer, setAnswer] = useState("");
-
+  // поля не очищаются, но ощищаются пароли
   return (
     <div className={classes.firstBlock}>
       <ModalWindow active={active} setActive={setActive} setAnswer={setAnswer}>
-        <SignUpForm
-          setActive={setActive}
-          answer={answer}
-          response={response}
-          setResponse={setResponse}
-          setAnswer={setAnswer}
-        />
+        <SignUpForm />
       </ModalWindow>
 
       <ModalWindow
@@ -31,11 +25,7 @@ const StartPage = () => {
         active={activeLogIn}
         setActive={setActiveLogIn}
       >
-        <LogInForm
-          response={response}
-          setActiveLogIn={setActiveLogIn}
-          setResponse={setResponse}
-        />
+        <LogInForm />
       </ModalWindow>
 
       <div className={classes.startpage}>

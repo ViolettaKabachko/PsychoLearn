@@ -11,6 +11,7 @@ import PhotoInput from "@/Components/PhotoInput/PhotoInput.tsx";
 import SettingsFrom from "@/Components/Forms/SettingsForm/SettingsFrom.tsx";
 import { useFetch } from "@/Hooks/useFetch.tsx";
 import Link from "@/Components/Link/Link.tsx";
+import ChangePasswordForm from "@/Components/Forms/ChangePasswordForm/ChangePasswordForm.tsx";
 
 const Profile = () => {
   const {
@@ -23,15 +24,14 @@ const Profile = () => {
     setAbout,
     setPhoto,
   } = useContext(PageOwnerContext);
-
   const logoClick = () => {
     navigate("/users/" + localStorage.getItem("id"));
     navigate(0);
   };
-
   const { id } = useParams();
   const navigate = useNavigate();
   const [isChanging, setIsChanging] = useState(false);
+  const [passwordChangeActive, setPasswordChangeActive] = useState(false);
   const [answer, setAnswer] = useState("");
   const [getInfo, loading, error] = useFetch(async () => {
     try {
@@ -77,6 +77,13 @@ const Profile = () => {
       >
         <SettingsFrom />
       </ModalWindow>
+      <ModalWindow
+        setAnswer={setAnswer}
+        active={passwordChangeActive}
+        setActive={setPasswordChangeActive}
+      >
+        <ChangePasswordForm />
+      </ModalWindow>
       <div className={classes.profile}>
         <div className={classes.navbar}>
           <Navbar onLogoFunc={logoClick} />
@@ -94,7 +101,7 @@ const Profile = () => {
                 disabled={false}
                 color={{ r: 149, g: 237, b: 219 }}
               >
-                {"Edit profile"}
+                Edit profile
               </Button>
             </div>
           )}
@@ -105,15 +112,10 @@ const Profile = () => {
         {isPageOwner && (
           <div className={classes.manageBlock}>
             <div className={classes.links}>
-              <div>
-                <Link>Wanna be writer or psychologist?</Link>
-              </div>
-              <div>
-                <Link>Change password</Link>
-              </div>
-              <div>
-                <Link>Change email</Link>
-              </div>
+              <Link>Wanna be writer or psychologist?</Link>
+              <Link onClick={() => setPasswordChangeActive(true)}>
+                Change password
+              </Link>
             </div>
 
             <div className={classes.logout}>

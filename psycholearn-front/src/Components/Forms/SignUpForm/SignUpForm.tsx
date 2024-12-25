@@ -11,25 +11,21 @@ import {
   validateEmail,
 } from "@/validation.ts";
 import Button from "../../Button/Button";
-import { useFetch } from "../../../Hooks/useFetch";
+import { useFetch } from "@/Hooks/useFetch.tsx";
 import { HttpGet, HttpPost } from "@/requests.ts";
 import bcrypt from "bcryptjs";
+import { toast, Toaster } from "react-hot-toast";
 
-interface SignUpFormProps {
-  setResponse: (any) => void;
-  setAnswer: (any) => void;
-  setActive: (any) => void;
-  response: string;
-  answer: string;
-}
-
-const SignUpForm: FC<SignUpFormProps> = ({ ...props }) => {
+const SignUpForm: FC = () => {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [firstPasswordEnter, setFirstPasswordEnter] = useState(false);
+
+  let notify: () => string | Promise<string>;
+
   const [registerFetch, loading1, error1] = useFetch(async () => {
     let salt = await HttpGet("/secure/get_salt");
     console.log(salt);
@@ -40,18 +36,17 @@ const SignUpForm: FC<SignUpFormProps> = ({ ...props }) => {
       password: await bcrypt.hash(password, salt.salt),
     });
 
-    props.setResponse(Object.hasOwn(await res, "msg"));
     if (Object.hasOwn(await res, "msg")) {
-      props.setAnswer((await res).msg);
       setName("");
       setSurname("");
       setEmail("");
       setPassword("");
       setRepeatedPassword("");
+      notify = async () => toast.success(res.msg);
     } else {
-      props.setAnswer((await res).err);
       setPassword("");
       setRepeatedPassword("");
+      notify = async () => toast.error(res.err);
     }
   });
 
@@ -148,16 +143,15 @@ const SignUpForm: FC<SignUpFormProps> = ({ ...props }) => {
             return acc + +cur;
           }, 0) !== 8
         }
-        onClick={async () => await registerFetch()}
+        onClick={async () => {
+          await registerFetch();
+          notify();
+        }}
         color={{ r: 170, g: 218, b: 209 }}
       >
         Sign Up
       </Button>
-      {props.response !== undefined && (
-        <ValidationLine func={() => props.response}>
-          {props.answer}
-        </ValidationLine>
-      )}
+      <Toaster position="bottom-center" />
     </>
   );
 };
