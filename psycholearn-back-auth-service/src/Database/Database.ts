@@ -95,6 +95,20 @@ export class DataBaseClient {
         }
     }
 
+    async updateUsersPassword(uid: number, newPassword: string) {
+        let res: Boolean = false;
+        try {
+            await this.client.query("UPDATE users SET userpassword = $1 WHERE uid = $2", [newPassword, uid])
+            res = true;
+        }
+        catch (e) {
+            console.log("Error was occurred " + e);
+        }
+        finally {
+            return res
+        }
+    }
+
     async updateUsersPhoto(uid: number, pathToPhoto: string): Promise<Boolean> {
         let res: Boolean = false;
         try {

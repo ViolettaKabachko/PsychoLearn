@@ -3,6 +3,7 @@ import { DbClient } from '../Database/DataBaseRunner';
 import { User, userGuard } from '../Interfaces/User';
 import * as jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
+import bcrypt from 'bcryptjs'
 import { IJwtPayload } from '../Interfaces/JwtPayload';
 import { IUpdateData } from '../Interfaces/UpdateData';
 
@@ -59,13 +60,19 @@ class UserController {
     }
 
     async updateUsersPhoto(req: Request, res: Response) {
-        try {
-            await DbClient.updateUsersPhoto(parseInt(req.params.id), `/pcts/${req.file?.originalname}`)
-            res.status(200).json({"msg": "Photo updated", ...res.locals.resBody})
+        if ((jwt.decode(req.cookies["refresh_token"]) as IJwtPayload)["uid"] === parseInt(req.params.id)) {
+            try {
+                await DbClient.updateUsersPhoto(parseInt(req.params.id), `/pcts/${req.file?.originalname}`)
+                res.status(200).json({"msg": "Photo updated", ...res.locals.resBody})
+            }
+            catch (e) {
+                console.log(`Error was occured: ${e}`)
+                res.status(401)
+            }
         }
-        catch (e) {
-            console.log(`Error was occured: ${e}`)
-            res.status(401)
+        else {
+            console.log("Trying to update not own user");
+            res.status(401).json({"err": "Trying to update not own user"});
         }
     }
 
@@ -81,6 +88,37 @@ class UserController {
             catch (e) {
                 console.log(`Error was occured: ${e}`)
                 res.status(500).json({"err": "Error was occurred while updating"})
+            }
+        }
+        else {
+            console.log("Trying to update not own user");
+            res.status(401).json({"err": "Trying to update not own user"});
+        }
+    }
+
+    async updatePassword(req: Request, res: Response) {
+        let body = req.body;
+        console.log(req.body)
+        if ((jwt.decode(req.cookies["refresh_token"]) as IJwtPayload)["uid"] === parseInt(req.params.id)) {
+            let userspassword = (await DbClient.getUserByEmail((await DbClient.getUserById(req.body.id)).email)).userpassword;
+            if (await bcrypt.compare(req.body.newPassword, userspassword)) {
+                res.status(500).json({"err": "New password must be different from the old one"})
+            }
+            else if (!(await bcrypt.compare(req.body.currentPassword, userspassword))) {
+                res.status(500).json({"err": "Incorrect password"})
+            }
+            else {
+                try {
+                    let newPass = await bcrypt.hash(body.newPassword, await bcrypt.genSalt(10))
+                    if (await DbClient.updateUsersPassword(parseInt(req.params.id), newPass))
+                        res.status(200).json({"msg": "Password updated successfully", ...res.locals.resBody})
+                    else
+                        throw new Error();
+                }
+                catch (e) {
+                    console.log(`Error was occured: ${e}`)
+                    res.status(500).json({"err": "Error was occurred while updating"})
+                }
             }
         }
         else {

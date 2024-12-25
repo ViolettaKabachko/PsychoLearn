@@ -14,6 +14,8 @@ userRouter.post("/:id/update_photo", FileMiddleware.diskLoader.single("users_pho
 
 userRouter.get("/:id/photo", userController.getUsersPhoto)
 
+userRouter.post("/:id/change_password", userController.updatePassword)
+
 userRouter.get("/:id/logout", userController.logout)
 
 userRouter.post("/:id/update_data", userController.updateUser)
