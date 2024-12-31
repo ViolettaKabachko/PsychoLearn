@@ -3,6 +3,7 @@ import classes from "./ArticlesPage.module.css";
 import Navbar from "@/Components/UI/Navbar/Navbar.tsx";
 import SearchField from "@/Components/SearchField/SearchField.tsx";
 import ArticleCard from "@/Components/PostCard/ArticleCard.tsx";
+import Filter from "@/Components/Filter/Filter.tsx";
 
 const ArticlesPage = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -23,7 +24,7 @@ const ArticlesPage = () => {
         <div className={classes.postcard}>
           <ArticleCard
             title={"Psychodynamic theory"}
-            url={"localhost:3000/articles"}
+            url={"http://localhost:3000/articles"}
             description={"A theory developed by Zigmund Freyd"}
             author={"Zigmund Freyd"}
             tags={["theories", "sexual behavior"]}
@@ -32,7 +33,7 @@ const ArticlesPage = () => {
         <div className={classes.postcard}>
           <ArticleCard
             title={"Psychodynamic theory"}
-            url={"localhost:3000/articles"}
+            url={"http://localhost:3000/articles"}
             description={"A theory developed by Zigmund Freyd"}
             author={"Zigmund Freyd"}
             tags={["theories", "sexual behavior"]}
@@ -41,7 +42,7 @@ const ArticlesPage = () => {
         <div className={classes.postcard}>
           <ArticleCard
             title={"Psychodynamic theory"}
-            url={"localhost:3000/articles"}
+            url={"http://localhost:3000/articles"}
             description={"A theory developed by Zigmund Freyd"}
             author={"Zigmund Freyd"}
             tags={["theories", "sexual behavior"]}
@@ -57,7 +58,9 @@ const ArticlesPage = () => {
           />
         </div>
       </div>
-      <div className={classes.filter}></div>
+      <div className={classes.filter}>
+        <Filter />
+      </div>
     </div>
   );
 };

@@ -44,7 +44,8 @@
 
 .filter {
     margin: 6% calc(100vw / 24) 0 3%;
+    grid-auto-rows: calc(100vh / 12);
+    display: grid;
     grid-column: 5 / 7;
     grid-row: 4 / -1;
-    background-color: #bcbcbc;
 }
