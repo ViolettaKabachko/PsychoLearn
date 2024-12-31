@@ -1,0 +1,29 @@
+.filterSection {
+    border-bottom: 1px black solid;
+    background-color: #f3f3f3;
+    padding: 10px;
+}
+
+.title {
+    font-size: 23px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+}
+
+.arrows {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.arrowDown, .arrowUp {
+    font-weight: bold;
+    margin: 7px 0 10px 15px;
+    font-size: 15px;
+    color: #606060;
+    transition: all ease-in-out 0.3s;
+}
+
+.arrowDown:hover, .arrowUp:hover {
+    cursor: pointer;
+    color: #020202;
+}

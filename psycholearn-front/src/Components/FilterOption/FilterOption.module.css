@@ -1,0 +1,15 @@
+.filter_option {
+    margin-left: 3%;
+}
+
+.checkbox {
+    width: 15px;
+    height: 15px;
+    border: 1px solid white;
+    margin-right: 8px;
+    accent-color: #85c9c6;
+}
+
+.label {
+    font-size: 18px;
+}
