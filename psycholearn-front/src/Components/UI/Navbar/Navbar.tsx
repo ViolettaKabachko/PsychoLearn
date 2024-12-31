@@ -24,7 +24,7 @@ const Navbar: FC<NavbarProps> = ({ ...props }) => {
       </div>
 
       <div className={classes.inner_link}>
-        <a href="/">More psycho articles</a>
+        <a href="/articles">More psycho articles</a>
       </div>
 
       <div onClick={() => props.onLogoFunc()} className={classes.log_in_logo}>

@@ -1,0 +1,88 @@
+.postcard {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    border: 1px solid rgba(132, 220, 205, 0.8);
+    border-radius: 5px;
+    height: 100%;
+    background-color: rgba(227, 227, 227, 0.2);
+    transition: all ease-in-out 0.3s;
+}
+
+.postcard:hover {
+    background-color: rgba(217, 248, 235, 0.4);
+}
+
+.title {
+    grid-row: 1 / 2;
+    display: flex;
+    align-items: center;
+    margin-left: 2%;
+}
+
+.title_href {
+    text-decoration: none;
+    color: #505050;
+    transition: all ease-in-out 0.3s;
+    font-size: 40px;
+}
+
+.title_href:hover {
+    color: #939393;
+}
+
+.description {
+    margin-left: 2%;
+    font-size: 20px;
+}
+
+.tags {
+    margin-left: 2%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.tag {
+    text-decoration: none;
+    color: #505050;
+    font-size: 18px;
+    transition: all ease-in-out 0.3s;
+    position: relative;
+    margin-right: 15px;
+}
+
+.tag:hover {
+    color: black
+}
+
+.tag:after {
+    content: "";
+    position: absolute;
+    border-bottom: 1px solid #505050;
+    width: 0;
+    top: 80%;
+    transform: translateX(-50%);
+    left: 50%;
+    transition: all ease-in-out 0.2s;
+}
+
+.tag:hover:after {
+    width: 100%;
+}
+
+.author {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 2%;
+}
+
+.author_href {
+    text-decoration: none;
+    color: #505050;
+    transition: all ease-in-out 0.3s;
+    font-size: 25px;
+}
+
+.author_href:hover {
+    color: #020202;
+}

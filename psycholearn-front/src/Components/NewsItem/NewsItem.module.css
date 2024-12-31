@@ -1,0 +1,41 @@
+.news_item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.news_item {
+    margin-left: 7%;
+}
+
+.title {
+    font-size: 25px;
+}
+
+.description {
+    font-size: 18px;
+}
+
+.author {
+    font-size: 20px;
+}
+
+.author > a {
+    transition: all ease-in-out 0.3s;
+    text-decoration: none;
+    color: #000000;
+}
+
+.author > a:hover {
+    color: #818181;
+}
+
+.date {
+    margin-right: 5%;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+}
