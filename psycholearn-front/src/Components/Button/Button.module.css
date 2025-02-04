@@ -52,14 +52,14 @@
 
 @media screen and (max-width: 1920px) {
     .button {
-        font-size: 34px;
+        font-size: 30px;
         border-radius: 12px 12px 3px 3px;
     }
 }
 
 @media screen and (max-width: 1560px) {
     .button {
-        font-size: 27px;
+        font-size: 24px;
         border-radius: 12px 12px 3px 3px;
     }
 }

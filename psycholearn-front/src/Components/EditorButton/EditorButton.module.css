@@ -1,0 +1,27 @@
+.toggle {
+    border-radius: 2px;
+    border: 1px solid lightgray;
+    background: #f3f3f3;
+    transition: all ease-in-out 0.2s;
+    position: relative;
+    padding: 5px 15px;
+}
+
+.toggle:hover {
+    cursor: pointer;
+    background: #a3ecd5;
+}
+
+.toggle.active {
+    background: #a3ecd5;
+}
+
+.toggle.active:hover {
+    background: #b5b5b5;
+}
+
+.toggle_div {
+    position: relative;
+    margin: 10px;
+    max-width: 80%;
+}

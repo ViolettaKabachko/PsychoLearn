@@ -2,62 +2,29 @@ import React from "react";
 import classes from "./ArticlesPage.module.css";
 import Navbar from "@/Components/UI/Navbar/Navbar.tsx";
 import SearchField from "@/Components/SearchField/SearchField.tsx";
-import ArticleCard from "@/Components/PostCard/ArticleCard.tsx";
 import Filter from "@/Components/Filter/Filter.tsx";
+import ArticleList from "@/Components/ArticleList/ArticleList.tsx";
+import { useNavigate } from "react-router-dom";
 
 const ArticlesPage = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
+  const navigate = useNavigate();
+  const logoClick = () => {
+    navigate("/users/" + localStorage.getItem("id"));
+    navigate(0);
+  };
   return (
     <div className={classes.articles_page}>
       <div className={classes.navbar}>
-        <Navbar onLogoFunc={() => {}} />
+        <Navbar onLogoFunc={logoClick} />
       </div>
       <div className={classes.search_field_container}>
-        <div className={classes.search_field}>
-          <SearchField
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+        <SearchField
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
-      <div className={classes.article_list}>
-        <div className={classes.postcard}>
-          <ArticleCard
-            title={"Psychodynamic theory"}
-            url={"http://localhost:3000/articles"}
-            description={"A theory developed by Zigmund Freyd"}
-            author={"Zigmund Freyd"}
-            tags={["theories", "sexual behavior"]}
-          />
-        </div>
-        <div className={classes.postcard}>
-          <ArticleCard
-            title={"Psychodynamic theory"}
-            url={"http://localhost:3000/articles"}
-            description={"A theory developed by Zigmund Freyd"}
-            author={"Zigmund Freyd"}
-            tags={["theories", "sexual behavior"]}
-          />
-        </div>
-        <div className={classes.postcard}>
-          <ArticleCard
-            title={"Psychodynamic theory"}
-            url={"http://localhost:3000/articles"}
-            description={"A theory developed by Zigmund Freyd"}
-            author={"Zigmund Freyd"}
-            tags={["theories", "sexual behavior"]}
-          />
-        </div>
-        <div className={classes.postcard}>
-          <ArticleCard
-            title={"Psychodynamic theory"}
-            url={"localhost:3000/articles"}
-            description={"A theory developed by Zigmund Freyd"}
-            author={"Zigmund Freyd"}
-            tags={["theories", "sexual behavior"]}
-          />
-        </div>
-      </div>
+      <ArticleList />
       <div className={classes.filter}>
         <Filter />
       </div>

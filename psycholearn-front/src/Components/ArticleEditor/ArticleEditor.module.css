@@ -1,0 +1,31 @@
+.editor {
+    width: 100%;
+    resize: none;
+    position: relative;
+    border: 1px solid black;
+    border-radius: 5px;
+    height: 100%;
+    overflow-x: hidden;
+    margin-bottom: calc(100vh / 12);
+}
+
+.editor > div {
+    height: 100%;
+}
+
+.editor::-webkit-scrollbar:horizontal {
+    display: none;
+}
+
+.editor:empty:before {
+    content: "Type your post here...";
+    color: #aaa;
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+}
+
+.editor:focus {
+    outline: none;
+}

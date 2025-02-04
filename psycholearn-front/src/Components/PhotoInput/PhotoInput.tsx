@@ -29,18 +29,6 @@ const PhotoInput: FC = () => {
     setNewPhoto("");
   });
 
-  // useEffect(() => {
-  //   HttpGetFile(`/users/${id}/photo`, {
-  //     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-  //   }).then((res) => {
-  //     res.blob().then((r) => {
-  //       console.log(isPageOwner);
-  //       console.log(r);
-  //       setPhoto(URL.createObjectURL(r));
-  //     });
-  //   });
-  // }, []);
-
   return (
     <>
       <div
@@ -65,7 +53,6 @@ const PhotoInput: FC = () => {
               setPhotoChanged(true);
               console.log(newPhoto);
             } else console.log("No file chosen");
-            //e.target.value = "";
           }}
           className={
             isPageOwner

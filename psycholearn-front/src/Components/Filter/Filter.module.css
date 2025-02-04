@@ -2,3 +2,14 @@
     grid-column: 1 / -1;
     grid-row: 1 / -1;
 }
+
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.apply_button {
+    margin-top: 10px;
+    width: 60%;
+    align-self: center;
+}
