@@ -24,6 +24,7 @@ const LogInForm: FC = () => {
       localStorage.setItem("access_token", res.access_token);
       localStorage.setItem("id", res.id);
       navigate("/users/" + res.id);
+      notify = () => toast.success(res.msg);
     }
     console.log(res);
   });

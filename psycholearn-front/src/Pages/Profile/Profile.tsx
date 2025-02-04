@@ -23,6 +23,7 @@ const Profile = () => {
     setRole,
     setAbout,
     setPhoto,
+    role,
   } = useContext(PageOwnerContext);
   const logoClick = () => {
     navigate("/users/" + localStorage.getItem("id"));
@@ -112,7 +113,13 @@ const Profile = () => {
         {isPageOwner && (
           <div className={classes.manageBlock}>
             <div className={classes.links}>
-              <Link>Wanna be writer or psychologist?</Link>
+              {role < 2 ? (
+                <Link>Wanna be writer or psychologist?</Link>
+              ) : (
+                <Link href="http://localhost:3000/articles/create_article">
+                  Create an article
+                </Link>
+              )}
               <Link onClick={() => setPasswordChangeActive(true)}>
                 Change password
               </Link>

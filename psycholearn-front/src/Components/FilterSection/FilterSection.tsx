@@ -15,25 +15,27 @@ const FilterSection: FC<IFilterSectionProps> = ({
   const [visibleCount, setVisibleCount] = useState(count);
   return (
     <div className={classes.filterSection}>
-      <div className={classes.title}>{sectionTitle}</div>
-      <div>{options.slice(0, visibleCount)}</div>
-      <div className={classes.arrows}>
-        {visibleCount <= options.length && (
-          <div
-            className={classes.arrowDown}
-            onClick={() => setVisibleCount(visibleCount + 3)}
-          >
-            {"Show more"}
-          </div>
-        )}
-        {count !== visibleCount && (
-          <div
-            className={classes.arrowUp}
-            onClick={() => setVisibleCount(visibleCount - 3)}
-          >
-            {"Hide"}
-          </div>
-        )}
+      <div className={classes.content}>
+        <div className={classes.title}>{sectionTitle}</div>
+        <div>{options.slice(0, visibleCount)}</div>
+        <div className={classes.arrows}>
+          {visibleCount <= options.length && (
+            <div
+              className={classes.arrowDown}
+              onClick={() => setVisibleCount(visibleCount + 3)}
+            >
+              {"Show more"}
+            </div>
+          )}
+          {count !== visibleCount && (
+            <div
+              className={classes.arrowUp}
+              onClick={() => setVisibleCount(visibleCount - 3)}
+            >
+              {"Hide"}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

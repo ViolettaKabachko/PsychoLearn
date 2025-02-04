@@ -1,50 +1,119 @@
-import React, { FC, PropsWithChildren } from "react";
+import React, { FC, useState } from "react";
 import FilterOption from "@/Components/FilterOption/FilterOption.tsx";
 import FilterSection from "@/Components/FilterSection/FilterSection.tsx";
 import classes from "./Filter.module.css";
+import Button from "@/Components/Button/Button.tsx";
+import { genQuery } from "@/funcs.ts";
 
-const Filter: FC<PropsWithChildren> = ({ children }) => {
+export interface IFilterOption {
+  authors: {};
+  tags: {};
+}
+
+const Filter: FC = () => {
+  const [options, setOptions] = useState({
+    authors: {},
+    tags: {},
+  });
   return (
     <div className={classes.filter}>
-      <FilterSection
-        sectionTitle={"Authors"}
-        options={[
-          <FilterOption optionName={"Violetta Kabaczko"} />,
-          <FilterOption optionName={"Violetta Kabaczko1"} />,
-          <FilterOption optionName={"Violetta Kabaczko2"} />,
-          <FilterOption optionName={"Violetta Kabaczko3"} />,
-          <FilterOption optionName={"Violetta Kabaczko4"} />,
-          <FilterOption optionName={"Violetta Kabaczko5"} />,
-          <FilterOption optionName={"Violetta Kabaczko6"} />,
-        ]}
-      />
-      <FilterSection
-        sectionTitle={"Tags"}
-        options={[
-          <FilterOption optionName={"Theories"} />,
-          <FilterOption optionName={"Sexual behavior"} />,
-          <FilterOption optionName={"Modern psychology"} />,
-          <FilterOption optionName={"Children"} />,
-        ]}
-      />
-      <FilterSection
-        sectionTitle={"Tags"}
-        options={[
-          <FilterOption optionName={"Theories"} />,
-          <FilterOption optionName={"Sexual behavior"} />,
-          <FilterOption optionName={"Modern psychology"} />,
-          <FilterOption optionName={"Children"} />,
-        ]}
-      />
-      <FilterSection
-        sectionTitle={"Tags"}
-        options={[
-          <FilterOption optionName={"Theories"} />,
-          <FilterOption optionName={"Sexual behavior"} />,
-          <FilterOption optionName={"Modern psychology"} />,
-          <FilterOption optionName={"Children"} />,
-        ]}
-      />
+      <div className={classes.content}>
+        <FilterSection
+          sectionTitle={"Authors"}
+          options={[
+            <FilterOption
+              setOptions={setOptions}
+              options={options}
+              optionType={"Authors"}
+              optionName={"Violetta Kabaczko"}
+            />,
+            <FilterOption
+              setOptions={setOptions}
+              options={options}
+              optionType={"Authors"}
+              optionName={"Violetta Kabaczko1"}
+            />,
+            <FilterOption
+              setOptions={setOptions}
+              options={options}
+              optionType={"Authors"}
+              optionName={"Violetta Kabaczko2"}
+            />,
+            <FilterOption
+              setOptions={setOptions}
+              options={options}
+              optionType={"Authors"}
+              optionName={"Violetta Kabaczko3"}
+            />,
+            <FilterOption
+              setOptions={setOptions}
+              options={options}
+              optionType={"Authors"}
+              optionName={"Violetta Kabaczko4"}
+            />,
+            <FilterOption
+              setOptions={setOptions}
+              options={options}
+              optionType={"Authors"}
+              optionName={"Violetta Kabaczko5"}
+            />,
+            <FilterOption
+              setOptions={setOptions}
+              options={options}
+              optionType={"Authors"}
+              optionName={"Violetta Kabaczko6"}
+            />,
+          ]}
+        />
+        <FilterSection
+          sectionTitle={"Tags"}
+          options={[
+            <FilterOption
+              setOptions={setOptions}
+              options={options}
+              optionType={"Tags"}
+              optionName={"Theories"}
+            />,
+            <FilterOption
+              setOptions={setOptions}
+              options={options}
+              optionType={"Tags"}
+              optionName={"Sexual behavior"}
+            />,
+            <FilterOption
+              setOptions={setOptions}
+              options={options}
+              optionType={"Tags"}
+              optionName={"Modern psychology"}
+            />,
+            <FilterOption
+              setOptions={setOptions}
+              options={options}
+              optionType={"Tags"}
+              optionName={"Children"}
+            />,
+          ]}
+        />
+        <div className={classes.apply_button}>
+          <Button
+            color={{
+              r: 173,
+              g: 252,
+              b: 220,
+            }}
+            onClick={() => {
+              console.log(options);
+              console.log(genQuery(options));
+            }}
+            disabled={
+              Object.keys(options.authors).length === 0 &&
+              Object.keys(options.tags).length === 0
+            }
+          >
+            Apply filters
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

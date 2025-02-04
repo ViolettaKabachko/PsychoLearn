@@ -7,3 +7,18 @@ html {
     height: 100vh;
     scroll-behavior: smooth;
 }
+
+h1 {
+    margin: 0;
+}
+
+div.DraftEditor-editorContainer,
+div.public-DraftEditor-content {
+    height: 100%;
+    font-size: 20px;
+    padding: 10px;
+}
+
+.DraftEditor-root {
+    height: 100%;
+}

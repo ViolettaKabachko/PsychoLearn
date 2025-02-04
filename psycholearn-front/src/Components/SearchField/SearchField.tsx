@@ -8,7 +8,7 @@ interface ISearchFieldProps {
 
 const SearchField: FC<ISearchFieldProps> = ({ value, onChange }) => {
   return (
-    <div>
+    <div className={classes.search_field_container}>
       <input
         className={classes.search_field}
         placeholder="Search"

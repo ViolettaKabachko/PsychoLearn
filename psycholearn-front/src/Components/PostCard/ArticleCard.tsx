@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import classes from "./ArticleCard.module.css";
+import { toSnakeCase } from "@/funcs.ts";
 
 interface IPostCardProps {
   title: string;
@@ -23,7 +24,9 @@ const ArticleCard: FC<IPostCardProps> = ({ ...props }) => {
           {props.tags.map((tag) => (
             <a
               className={classes.tag}
-              href={"https://psycholearn.com/articles/search/tags/" + tag}
+              href={
+                "http://localhost:3000/articles/search?tags=" + toSnakeCase(tag)
+              }
             >
               {tag}
             </a>

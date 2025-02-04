@@ -1,7 +1,11 @@
 .filterSection {
-    border-bottom: 1px black solid;
     background-color: #f3f3f3;
     padding: 10px;
+    width: 100%;
+}
+
+.content {
+    border-bottom: 1px black solid;
 }
 
 .title {
