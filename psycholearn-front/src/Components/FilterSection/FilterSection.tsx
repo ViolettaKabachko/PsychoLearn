@@ -17,12 +17,21 @@ const FilterSection: FC<IFilterSectionProps> = ({
     <div className={classes.filterSection}>
       <div className={classes.content}>
         <div className={classes.title}>{sectionTitle}</div>
-        <div>{options.slice(0, visibleCount)}</div>
+        <div
+          className={classes.visibleTags}
+          style={{
+            height: `${visibleCount * 26}px`,
+          }}
+        >
+          {options.slice(0, visibleCount)}
+        </div>
         <div className={classes.arrows}>
           {visibleCount <= options.length && (
             <div
               className={classes.arrowDown}
-              onClick={() => setVisibleCount(visibleCount + 3)}
+              onClick={() =>
+                setVisibleCount(Math.min(visibleCount + 3, options.length))
+              }
             >
               {"Show more"}
             </div>
@@ -30,7 +39,7 @@ const FilterSection: FC<IFilterSectionProps> = ({
           {count !== visibleCount && (
             <div
               className={classes.arrowUp}
-              onClick={() => setVisibleCount(visibleCount - 3)}
+              onClick={() => setVisibleCount(Math.max(visibleCount - 3, 3))}
             >
               {"Hide"}
             </div>

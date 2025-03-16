@@ -12,6 +12,7 @@ import SettingsFrom from "@/Components/Forms/SettingsForm/SettingsFrom.tsx";
 import { useFetch } from "@/Hooks/useFetch.tsx";
 import Link from "@/Components/Link/Link.tsx";
 import ChangePasswordForm from "@/Components/Forms/ChangePasswordForm/ChangePasswordForm.tsx";
+import { logoClick } from "@/funcs.ts";
 
 const Profile = () => {
   const {
@@ -25,10 +26,7 @@ const Profile = () => {
     setPhoto,
     role,
   } = useContext(PageOwnerContext);
-  const logoClick = () => {
-    navigate("/users/" + localStorage.getItem("id"));
-    navigate(0);
-  };
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [isChanging, setIsChanging] = useState(false);
@@ -87,7 +85,7 @@ const Profile = () => {
       </ModalWindow>
       <div className={classes.profile}>
         <div className={classes.navbar}>
-          <Navbar onLogoFunc={logoClick} />
+          <Navbar onLogoFunc={() => logoClick(navigate)} />
         </div>
 
         <div className={classes.mainBlock}>
@@ -116,8 +114,8 @@ const Profile = () => {
               {role < 2 ? (
                 <Link>Wanna be writer or psychologist?</Link>
               ) : (
-                <Link href="http://localhost:3000/articles/create_article">
-                  Create an article
+                <Link href={`http://localhost:3000/users/${id}/workplace`}>
+                  Your articles
                 </Link>
               )}
               <Link onClick={() => setPasswordChangeActive(true)}>

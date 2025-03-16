@@ -31,3 +31,9 @@
     cursor: pointer;
     color: #020202;
 }
+
+
+.visibleTags {
+    transition: height ease-in-out 0.5s;
+    overflow: hidden;
+}

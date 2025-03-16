@@ -7,6 +7,7 @@ interface NavbarProps {
 }
 
 const Navbar: FC<NavbarProps> = ({ ...props }) => {
+  console.log("Ja renderus");
   return (
     <div className={classes.navbar}>
       <div className={classes.logo}>
@@ -16,7 +17,7 @@ const Navbar: FC<NavbarProps> = ({ ...props }) => {
       </div>
 
       <div className={classes.inner_link}>
-        <a href="/">Essential psychology course</a>
+        <a href="/course">Essential psychology course</a>
       </div>
 
       <div className={classes.inner_link}>
@@ -34,4 +35,4 @@ const Navbar: FC<NavbarProps> = ({ ...props }) => {
   );
 };
 
-export default Navbar;
+export default React.memo(Navbar);
