@@ -1,0 +1,45 @@
+.draft_card {
+    width: 100%;
+    border: 1px solid #8bf4db;
+    display: flex;
+    justify-content: space-between;
+    min-height: 25%;
+    max-height: 30%;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-left: 2%;
+}
+
+.rightBlock {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 30%;
+    min-width: 20%;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.editButton {
+    margin-right: 5%;
+}
+
+.title {
+    text-decoration: none;
+    color: black;
+    font-size: 24px;
+}
+
+.description {
+    color: #595959;
+    font-size: 18px;
+}

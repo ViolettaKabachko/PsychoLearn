@@ -8,11 +8,14 @@ import { useNavigate } from "react-router-dom";
 
 const ArticlesPage = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
+
   const navigate = useNavigate();
+
   const logoClick = () => {
     navigate("/users/" + localStorage.getItem("id"));
     navigate(0);
   };
+
   return (
     <div className={classes.articles_page}>
       <div className={classes.navbar}>

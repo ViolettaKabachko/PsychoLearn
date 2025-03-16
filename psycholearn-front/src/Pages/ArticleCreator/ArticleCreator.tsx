@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import classes from "./ArticleCreator.module.css";
 import Navbar from "@/Components/UI/Navbar/Navbar.tsx";
 import Button from "@/Components/Button/Button.tsx";
-import { mainBlue, mainPink } from "@/funcs.ts";
+import { logoClick, mainBlue, mainPink } from "@/funcs.ts";
 import { HttpGet } from "@/requests.ts";
 import ArticleEditor from "@/Components/ArticleEditor/ArticleEditor.tsx";
 import ToolPanel from "@/Components/ToolPanel/ToolPanell.tsx";
@@ -17,10 +17,6 @@ const ArticleCreator = () => {
   const navigate = useNavigate();
   const { state } = useEditorAPI();
   const articleTitle = "";
-  const logoClick = () => {
-    navigate("/users/" + localStorage.getItem("id"));
-    navigate(0);
-  };
 
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
@@ -40,7 +36,7 @@ const ArticleCreator = () => {
     <div className={classes.article_creator}>
       <Toaster position="bottom-center" />
       <div className={classes.navbar}>
-        <Navbar onLogoFunc={logoClick} />
+        <Navbar onLogoFunc={() => logoClick(navigate)} />
       </div>
       <div className={classes.textarea}>
         <ArticleEditor />

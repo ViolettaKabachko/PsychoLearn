@@ -1,3 +1,5 @@
+import { NavigateFunction } from "react-router-dom";
+
 export const toSnakeCase = (text: string) => {
   return text
     .split(" ")
@@ -20,6 +22,11 @@ export const genQuery = (obj: { [key: string]: { [key: string]: string } }) => {
   }
   console.log(query);
   return query.join("&");
+};
+
+export const logoClick = (navFunc: NavigateFunction) => {
+  navFunc("/users/" + localStorage.getItem("id"));
+  navFunc(0);
 };
 
 export const mainBlue = { r: 149, g: 237, b: 219 };
